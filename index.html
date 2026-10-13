@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Square</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #14121a;
+      --ink: #f4f0ff;
+      --muted: #9b93b0;
+      --panel: rgba(28, 24, 38, 0.88);
+      --c1: #ff4d6d;
+      --c2: #ffd60a;
+      --c3: #2ec4b6;
+      --c4: #7b2cbf;
+      --c5: #fb5607;
+      --c6: #00f5d4;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Space Grotesk", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+      touch-action: none;
+    }
+
+    body {
+      background-image:
+        radial-gradient(ellipse 55% 45% at 12% 18%, rgba(255, 77, 109, 0.28), transparent 70%),
+        radial-gradient(ellipse 50% 40% at 88% 22%, rgba(255, 214, 10, 0.22), transparent 70%),
+        radial-gradient(ellipse 45% 50% at 78% 82%, rgba(46, 196, 182, 0.24), transparent 70%),
+        radial-gradient(ellipse 40% 45% at 18% 78%, rgba(123, 44, 191, 0.22), transparent 70%);
+    }
+
+    #canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+      display: block;
+    }
+
+    .hud {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      pointer-events: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 1.25rem 1.5rem;
+      gap: 1rem;
+    }
+
+    .brand {
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      background: linear-gradient(110deg, var(--c1), var(--c2), var(--c3), var(--c4));
+      background-size: 220% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: brandShift 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes brandShift {
+      from { background-position: 0% 50%; }
+      to { background-position: 100% 50%; }
+    }
+
+    .hint {
+      margin-top: 0.35rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      transition: opacity 280ms ease-out;
+    }
+
+    .hint.hidden {
+      opacity: 0;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, auto);
+      gap: 1.25rem 1.75rem;
+      background: var(--panel);
+      backdrop-filter: blur(10px);
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+    }
+
+    .stat {
+      text-align: right;
+      min-width: 3.5rem;
+    }
+
+    .stat-label {
+      display: block;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: 0.15rem;
+    }
+
+    .stat-value {
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .stat:nth-child(1) .stat-value { color: var(--c1); }
+    .stat:nth-child(2) .stat-value { color: var(--c2); }
+    .stat:nth-child(3) .stat-value { color: var(--c3); }
+    .stat:nth-child(4) .stat-value { color: var(--c6); }
+
+    .score-flash {
+      position: fixed;
+      z-index: 3;
+      pointer-events: none;
+      font-weight: 600;
+      font-size: 2rem;
+      letter-spacing: -0.04em;
+      opacity: 0;
+      text-shadow: 0 0 18px currentColor;
+      transform: translate(-50%, -50%) scale(0.96);
+      transition:
+        opacity 220ms ease-out,
+        transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .score-flash.show {
+      opacity: 1;
+      transform: translate(-50%, -60%) scale(1);
+    }
+
+    .score-flash.hide {
+      opacity: 0;
+      transform: translate(-50%, -80%) scale(1.02);
+      transition:
+        opacity 400ms ease-out,
+        transform 400ms ease-out;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 1.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    .footer-hint {
+      pointer-events: none;
+      opacity: 0.75;
+    }
+
+    .hud-btn {
+      pointer-events: auto;
+      appearance: none;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(28, 24, 38, 0.88);
+      color: var(--muted);
+      font: inherit;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.7rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition:
+        color 160ms ease-out,
+        border-color 160ms ease-out,
+        background 160ms ease-out,
+        transform 100ms ease-out;
+    }
+
+    .hud-btn:hover {
+      color: var(--ink);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .hud-btn:active {
+      transform: scale(0.97);
+    }
+
+    .hud-btn[aria-pressed="true"] {
+      color: var(--c6);
+      border-color: rgba(0, 245, 212, 0.45);
+      background: rgba(0, 245, 212, 0.1);
+    }
+
+    .hud-btn.reset:hover {
+      color: var(--c1);
+      border-color: rgba(255, 77, 109, 0.45);
+    }
+
+    @media (max-width: 640px) {
+      .hud {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1rem;
+      }
+
+      .stats {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
+        width: 100%;
+        padding: 0.65rem 0.75rem;
+      }
+
+      .stat {
+        text-align: center;
+        min-width: 0;
+      }
+
+      .stat-value {
+        font-size: 1rem;
+      }
+
+      .footer-hint {
+        display: none;
+      }
+
+      .footer {
+        bottom: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <div class="hud">
+    <div>
+      <div class="brand">Square</div>
+      <div class="hint" id="hint">Click and drag to draw a square</div>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-label">Score</span>
+        <span class="stat-value" id="lastScore">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Avg</span>
+        <span class="stat-value" id="avgScore">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Best</span>
+        <span class="stat-value" id="bestScore">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Tries</span>
+        <span class="stat-value" id="attempts">0</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="score-flash" id="scoreFlash"></div>
+  <div class="footer">
+    <span class="footer-hint">Almost square barely counts · R reset · G grid</span>
+    <button type="button" class="hud-btn" id="gridToggle" aria-pressed="true">Grid</button>
+    <button type="button" class="hud-btn reset" id="resetBtn">Reset</button>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "square-game-stats-v2";
+    const GRID_PREF_KEY = "square-game-grid-v1";
+    const MIN_SIZE = 24;
+    const GRID_SIZE = 50;
+    const GRID_MAJOR = 100;
+    const PALETTE = ["#ff4d6d", "#ffd60a", "#2ec4b6", "#7b2cbf", "#fb5607", "#00f5d4", "#ff006e", "#3a86ff"];
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const hintEl = document.getElementById("hint");
+    const lastScoreEl = document.getElementById("lastScore");
+    const avgScoreEl = document.getElementById("avgScore");
+    const bestScoreEl = document.getElementById("bestScore");
+    const attemptsEl = document.getElementById("attempts");
+    const flashEl = document.getElementById("scoreFlash");
+    const gridToggleEl = document.getElementById("gridToggle");
+    const resetBtnEl = document.getElementById("resetBtn");
+
+    let stats = loadStats();
+    let showGrid = loadGridPref();
+    let drawing = false;
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let lastRect = null;
+    let drawColor = PALETTE[0];
+    let colorIndex = 0;
+    let dpr = 1;
+    let flashTimer = null;
+
+    function loadStats() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { attempts: 0, total: 0, best: 0, last: null };
+        const parsed = JSON.parse(raw);
+        return {
+          attempts: Number(parsed.attempts) || 0,
+          total: Number(parsed.total) || 0,
+          best: Number(parsed.best) || 0,
+          last: parsed.last == null ? null : Number(parsed.last),
+        };
+      } catch {
+        return { attempts: 0, total: 0, best: 0, last: null };
+      }
+    }
+
+    function saveStats() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
+    }
+
+    function loadGridPref() {
+      try {
+        const raw = localStorage.getItem(GRID_PREF_KEY);
+        if (raw == null) return true;
+        return raw === "1";
+      } catch {
+        return true;
+      }
+    }
+
+    function saveGridPref() {
+      localStorage.setItem(GRID_PREF_KEY, showGrid ? "1" : "0");
+    }
+
+    function syncGridToggle() {
+      gridToggleEl.setAttribute("aria-pressed", showGrid ? "true" : "false");
+      gridToggleEl.textContent = showGrid ? "Grid on" : "Grid off";
+    }
+
+    function setGridVisible(visible) {
+      showGrid = visible;
+      saveGridPref();
+      syncGridToggle();
+      redraw();
+    }
+
+    function toggleGrid() {
+      setGridVisible(!showGrid);
+    }
+
+    function formatScore(value) {
+      if (value == null || Number.isNaN(value)) return "—";
+      return String(Math.round(value));
+    }
+
+    function updateHud() {
+      lastScoreEl.textContent = formatScore(stats.last);
+      attemptsEl.textContent = String(stats.attempts);
+      bestScoreEl.textContent = stats.attempts > 0 ? formatScore(stats.best) : "—";
+      avgScoreEl.textContent =
+        stats.attempts > 0 ? formatScore(stats.total / stats.attempts) : "—";
+    }
+
+    function nextColor() {
+      colorIndex = (colorIndex + 1) % PALETTE.length;
+      drawColor = PALETTE[colorIndex];
+      return drawColor;
+    }
+
+    function resize() {
+      dpr = Math.max(1, window.devicePixelRatio || 1);
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      redraw();
+    }
+
+    function getPoint(event) {
+      if (event.touches && event.touches.length > 0) {
+        return { x: event.touches[0].clientX, y: event.touches[0].clientY };
+      }
+      if (event.changedTouches && event.changedTouches.length > 0) {
+        return {
+          x: event.changedTouches[0].clientX,
+          y: event.changedTouches[0].clientY,
+        };
+      }
+      return { x: event.clientX, y: event.clientY };
+    }
+
+    function normalizeRect(x1, y1, x2, y2) {
+      const left = Math.min(x1, x2);
+      const top = Math.min(y1, y2);
+      const width = Math.abs(x2 - x1);
+      const height = Math.abs(y2 - y1);
+      return { left, top, width, height };
+    }
+
+    // Harsh curve: 99% ratio ~90, 95% ~60, 90% ~35, 80% ~11
+    function scoreRect(width, height) {
+      if (width < MIN_SIZE || height < MIN_SIZE) return null;
+      const ratio = Math.min(width, height) / Math.max(width, height);
+      return Math.round(Math.pow(ratio, 10) * 100);
+    }
+
+    function scoreColor(score) {
+      if (score >= 95) return "#00f5d4";
+      if (score >= 80) return "#ffd60a";
+      if (score >= 50) return "#fb5607";
+      return "#ff4d6d";
+    }
+
+    function drawGrid(w, h) {
+      ctx.save();
+      ctx.lineWidth = 1;
+
+      for (let x = 0; x <= w; x += GRID_SIZE) {
+        const major = x % GRID_MAJOR === 0;
+        ctx.strokeStyle = major
+          ? "rgba(255, 255, 255, 0.14)"
+          : "rgba(255, 255, 255, 0.06)";
+        ctx.beginPath();
+        ctx.moveTo(x + 0.5, 0);
+        ctx.lineTo(x + 0.5, h);
+        ctx.stroke();
+      }
+
+      for (let y = 0; y <= h; y += GRID_SIZE) {
+        const major = y % GRID_MAJOR === 0;
+        ctx.strokeStyle = major
+          ? "rgba(255, 255, 255, 0.14)"
+          : "rgba(255, 255, 255, 0.06)";
+        ctx.beginPath();
+        ctx.moveTo(0, y + 0.5);
+        ctx.lineTo(w, y + 0.5);
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    }
+
+    function redraw() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      ctx.clearRect(0, 0, w, h);
+      if (showGrid) drawGrid(w, h);
+
+      if (lastRect) {
+        ctx.strokeStyle = lastRect.color || "rgba(255, 255, 255, 0.2)";
+        ctx.globalAlpha = 0.35;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(lastRect.left, lastRect.top, lastRect.width, lastRect.height);
+        ctx.globalAlpha = 1;
+      }
+
+      if (drawing) {
+        const rect = normalizeRect(startX, startY, currentX, currentY);
+        ctx.strokeStyle = drawColor;
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = drawColor;
+        ctx.shadowBlur = 12;
+        ctx.strokeRect(rect.left, rect.top, rect.width, rect.height);
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    function showFlash(score, x, y) {
+      clearTimeout(flashTimer);
+      flashEl.textContent = String(score);
+      flashEl.style.color = scoreColor(score);
+      flashEl.style.left = `${x}px`;
+      flashEl.style.top = `${y}px`;
+      flashEl.classList.remove("hide", "show");
+      void flashEl.offsetWidth;
+      flashEl.classList.add("show");
+      flashTimer = setTimeout(() => {
+        flashEl.classList.add("hide");
+        flashEl.classList.remove("show");
+      }, 700);
+    }
+
+    function finishDraw() {
+      if (!drawing) return;
+      drawing = false;
+
+      const rect = normalizeRect(startX, startY, currentX, currentY);
+      const score = scoreRect(rect.width, rect.height);
+
+      if (score == null) {
+        redraw();
+        return;
+      }
+
+      lastRect = { ...rect, color: drawColor };
+      stats.attempts += 1;
+      stats.total += score;
+      stats.last = score;
+      if (score > stats.best) stats.best = score;
+      saveStats();
+      updateHud();
+      hintEl.classList.add("hidden");
+
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      showFlash(score, cx, cy);
+      redraw();
+    }
+
+    function onPointerDown(event) {
+      event.preventDefault();
+      const point = getPoint(event);
+      drawing = true;
+      nextColor();
+      startX = currentX = point.x;
+      startY = currentY = point.y;
+      redraw();
+    }
+
+    function onPointerMove(event) {
+      if (!drawing) return;
+      event.preventDefault();
+      const point = getPoint(event);
+      currentX = point.x;
+      currentY = point.y;
+      redraw();
+    }
+
+    function onPointerUp(event) {
+      if (!drawing) return;
+      event.preventDefault();
+      const point = getPoint(event);
+      currentX = point.x;
+      currentY = point.y;
+      finishDraw();
+    }
+
+    function resetStats() {
+      stats = { attempts: 0, total: 0, best: 0, last: null };
+      lastRect = null;
+      saveStats();
+      updateHud();
+      hintEl.classList.remove("hidden");
+      redraw();
+    }
+
+    canvas.addEventListener("mousedown", onPointerDown);
+    window.addEventListener("mousemove", onPointerMove);
+    window.addEventListener("mouseup", onPointerUp);
+
+    canvas.addEventListener("touchstart", onPointerDown, { passive: false });
+    window.addEventListener("touchmove", onPointerMove, { passive: false });
+    window.addEventListener("touchend", onPointerUp, { passive: false });
+    window.addEventListener("touchcancel", onPointerUp, { passive: false });
+
+    window.addEventListener("resize", resize);
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "r" || event.key === "R") {
+        resetStats();
+      }
+      if (event.key === "g" || event.key === "G") {
+        toggleGrid();
+      }
+    });
+
+    gridToggleEl.addEventListener("click", (event) => {
+      event.stopPropagation();
+      toggleGrid();
+    });
+
+    resetBtnEl.addEventListener("click", (event) => {
+      event.stopPropagation();
+      resetStats();
+    });
+
+    syncGridToggle();
+    updateHud();
+    resize();
+  </script>
+</body>
+</html>
