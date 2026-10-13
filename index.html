@@ -49,6 +49,7 @@
     #canvas {
       position: fixed;
       inset: 0;
+      z-index: 1;
       width: 100%;
       height: 100%;
       cursor: crosshair;
@@ -191,11 +192,14 @@
       position: fixed;
       left: 50%;
       top: 46%;
-      z-index: 6;
+      z-index: 0;
       pointer-events: none;
-      font-size: clamp(2.8rem, 10vw, 5.5rem);
+      max-width: min(92vw, 20rem);
+      text-align: center;
+      font-size: clamp(2rem, 8vw, 5.5rem);
       font-weight: 600;
       letter-spacing: -0.06em;
+      line-height: 1.05;
       color: #00f5d4;
       text-shadow:
         0 0 24px rgba(0, 245, 212, 0.7),
@@ -298,6 +302,145 @@
       font-size: 0.85rem;
       color: var(--c2);
       font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .shop-section {
+      margin: 0.85rem 0 0.45rem;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .shop-section:first-child {
+      margin-top: 0;
+    }
+
+    .prestige-summary {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.45;
+      margin-bottom: 0.75rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .prestige-summary strong {
+      color: var(--c2);
+    }
+
+    .prestige-go {
+      width: 100%;
+      margin-bottom: 0.75rem;
+      appearance: none;
+      border: 1px solid rgba(255, 214, 10, 0.35);
+      background: rgba(255, 214, 10, 0.1);
+      color: var(--c2);
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.65rem 0.75rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition:
+        border-color 160ms ease-out,
+        background 160ms ease-out,
+        transform 100ms ease-out,
+        opacity 160ms ease-out;
+    }
+
+    .prestige-go:hover:not(:disabled) {
+      border-color: rgba(255, 214, 10, 0.6);
+      background: rgba(255, 214, 10, 0.16);
+    }
+
+    .prestige-go:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .prestige-go:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .milestone {
+      width: 100%;
+      text-align: left;
+      appearance: none;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--ink);
+      font: inherit;
+      border-radius: 10px;
+      padding: 0.7rem 0.75rem;
+      margin-bottom: 0.55rem;
+      cursor: pointer;
+      transition:
+        border-color 160ms ease-out,
+        background 160ms ease-out,
+        transform 100ms ease-out,
+        opacity 160ms ease-out;
+    }
+
+    .milestone:hover:not(:disabled) {
+      border-color: rgba(0, 245, 212, 0.4);
+      background: rgba(0, 245, 212, 0.06);
+    }
+
+    .milestone:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .milestone:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .milestone.ready {
+      border-color: rgba(255, 214, 10, 0.45);
+      background: rgba(255, 214, 10, 0.08);
+    }
+
+    .milestone-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .milestone-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .milestone-reward {
+      font-size: 0.78rem;
+      color: var(--c2);
+      white-space: nowrap;
+    }
+
+    .milestone-bar {
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      margin: 0.35rem 0 0.25rem;
+    }
+
+    .milestone-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--c3), var(--c2));
+      border-radius: 999px;
+      transition: width 200ms ease-out;
+    }
+
+    .milestone-meta {
+      font-size: 0.72rem;
+      color: var(--muted);
       font-variant-numeric: tabular-nums;
     }
 
@@ -430,6 +573,10 @@
       border-color: rgba(255, 77, 109, 0.45);
     }
 
+    .stats-toggle {
+      display: none;
+    }
+
     @media (max-width: 720px) {
       .hud {
         flex-direction: column;
@@ -442,6 +589,29 @@
         gap: 0.75rem;
         width: 100%;
         padding: 0.65rem 0.75rem;
+        transition:
+          opacity 220ms ease-out,
+          transform 220ms ease-out,
+          max-height 220ms ease-out,
+          margin 220ms ease-out,
+          padding 220ms ease-out;
+        max-height: 20rem;
+        overflow: hidden;
+      }
+
+      .hud.stats-collapsed .stats {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.98);
+        max-height: 0;
+        margin: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        border-width: 0;
+        pointer-events: none;
+      }
+
+      .hud.stats-collapsed .meta-line {
+        display: none;
       }
 
       .stat {
@@ -451,6 +621,10 @@
 
       .stat-value {
         font-size: 1rem;
+      }
+
+      .stats-toggle {
+        display: inline-block;
       }
 
       .footer-hint {
@@ -483,7 +657,7 @@
 <body>
   <canvas id="canvas"></canvas>
 
-  <div class="hud">
+  <div class="hud" id="hud">
     <div>
       <div class="brand">Square</div>
       <div class="hint" id="hint">Click and drag to draw a square</div>
@@ -492,9 +666,10 @@
         · Crit <strong id="critLabel">0%</strong>
         · Guys <strong id="guysLabel">0</strong>
         · Aura <strong id="auraLabel">off</strong>
+        · PP <strong id="ppLabel">0</strong>
       </div>
     </div>
-    <div class="stats">
+    <div class="stats" id="statsPanel">
       <div class="stat">
         <span class="stat-label">Score</span>
         <span class="stat-value" id="lastScore">—</span>
@@ -534,18 +709,43 @@
     <div id="upgradeList"></div>
   </aside>
 
+  <aside class="shop" id="facilities" aria-hidden="true">
+    <div class="shop-head">
+      <div class="shop-title">Facilities</div>
+      <div class="shop-pips" id="facilityPips">0 pips</div>
+    </div>
+    <div class="shop-section" id="shopIdleLabel">Idle 0/s</div>
+    <div id="facilityList"></div>
+  </aside>
+
+  <aside class="shop" id="prestige" aria-hidden="true">
+    <div class="shop-head">
+      <div class="shop-title">Prestige</div>
+      <div class="shop-pips" id="prestigePointsLabel">0 PP</div>
+    </div>
+    <div class="prestige-summary" id="prestigeSummary"></div>
+    <button type="button" class="prestige-go" id="prestigeGo" disabled>Prestige</button>
+    <div class="shop-section">Milestones</div>
+    <div id="milestoneList"></div>
+  </aside>
+
   <div class="score-flash" id="scoreFlash"></div>
   <div class="perfect-banner" id="perfectBanner" aria-hidden="true">PERFECT!</div>
   <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
   <div class="footer">
-    <span class="footer-hint">Square in relics · U shop</span>
-    <button type="button" class="hud-btn" id="shopToggle" aria-pressed="false">Shop</button>
+    <span class="footer-hint">U upgrades · F facilities · P prestige</span>
+    <button type="button" class="hud-btn stats-toggle" id="statsToggle" aria-pressed="true">Stats</button>
+    <button type="button" class="hud-btn" id="shopToggle" aria-pressed="false">Upgrades</button>
+    <button type="button" class="hud-btn" id="facilitiesToggle" aria-pressed="false">Facilities</button>
+    <button type="button" class="hud-btn" id="prestigeToggle" aria-pressed="false">Prestige</button>
     <button type="button" class="hud-btn restart" id="restartBtn">Restart</button>
   </div>
 
   <script>
-    const STORAGE_KEY = "square-game-state-v3";
+    const STORAGE_KEY = "square-game-state-v5";
+    const STATS_PREF_KEY = "square-game-stats-visible-v1";
     const MIN_SIZE = 24;
+    const PRESTIGE_SCALE = 1.65;
     const GRID_SIZE = 50;
     const GRID_MAJOR = 100;
     const PALETTE = ["#ff4d6d", "#ffd60a", "#2ec4b6", "#7b2cbf", "#fb5607", "#00f5d4", "#ff006e", "#3a86ff"];
@@ -683,6 +883,139 @@
       },
     ];
 
+    const FACILITY_DEFS = [
+      {
+        id: "facSketch",
+        name: "Sketch Nook",
+        desc: "A closet studio. One gal doodles shaky squares. +3/s each.",
+        baseCost: 250,
+        costScale: 1.52,
+        pipsPerSec: 3,
+      },
+      {
+        id: "facDrawingRoom",
+        name: "Drawing Room",
+        desc: "Gals at drafting tables producing squares. +18/s each.",
+        baseCost: 1800,
+        costScale: 1.58,
+        pipsPerSec: 18,
+        requires: "facSketch",
+      },
+      {
+        id: "facStudio",
+        name: "Studio Wing",
+        desc: "A whole wing of square practice rooms. +85/s each.",
+        baseCost: 12000,
+        costScale: 1.62,
+        pipsPerSec: 85,
+        requires: "facDrawingRoom",
+      },
+      {
+        id: "facAcademy",
+        name: "Square Academy",
+        desc: "Curriculum: 1:1 ratios only. +350/s each.",
+        baseCost: 75000,
+        costScale: 1.68,
+        pipsPerSec: 350,
+        requires: "facStudio",
+      },
+      {
+        id: "facFactory",
+        name: "Geometry Factory",
+        desc: "Industrial square extrusion lines. +1.5k/s each.",
+        baseCost: 450000,
+        costScale: 1.72,
+        pipsPerSec: 1500,
+        requires: "facAcademy",
+      },
+      {
+        id: "facFoundry",
+        name: "Orthogonality Foundry",
+        desc: "Heats irregular forms until they obey. +7k/s each.",
+        baseCost: 2800000,
+        costScale: 1.78,
+        pipsPerSec: 7000,
+        requires: "facFactory",
+      },
+      {
+        id: "facPlant",
+        name: "Right-Angle Refinery",
+        desc: "Distills chaos into clean edges. +35k/s each.",
+        baseCost: 18000000,
+        costScale: 1.82,
+        pipsPerSec: 35000,
+        requires: "facFoundry",
+      },
+      {
+        id: "facAnomaly",
+        name: "Anomalous Shape Reduction Complex",
+        desc: "Circles, blobs, and worse are reduced to squares. +200k/s each.",
+        baseCost: 120000000,
+        costScale: 1.9,
+        pipsPerSec: 200000,
+        requires: "facPlant",
+      },
+    ];
+
+    const PRESTIGE_MILESTONES = [
+      {
+        id: "crits",
+        name: "Critical Hits",
+        stat: "crits",
+        base: 10,
+        scale: 1.8,
+        points: 1,
+      },
+      {
+        id: "perfects",
+        name: "Perfect Squares",
+        stat: "perfects",
+        base: 5,
+        scale: 1.75,
+        points: 1,
+      },
+      {
+        id: "attempts",
+        name: "Attempts",
+        stat: "attempts",
+        base: 40,
+        scale: 1.7,
+        points: 1,
+      },
+      {
+        id: "upgrades",
+        name: "Upgrade Levels",
+        stat: "upgradeLevels",
+        base: 20,
+        scale: 1.65,
+        points: 1,
+      },
+      {
+        id: "facilities",
+        name: "Facility Levels",
+        stat: "facilityLevels",
+        base: 8,
+        scale: 1.7,
+        points: 1,
+      },
+      {
+        id: "relicsCaught",
+        name: "Relics Caught",
+        stat: "relicsCaught",
+        base: 6,
+        scale: 1.75,
+        points: 1,
+      },
+      {
+        id: "pipsEarned",
+        name: "Pips Earned",
+        stat: "pipsEarned",
+        base: 25000,
+        scale: 2.0,
+        points: 2,
+      },
+    ];
+
     const FEEDBACK = [
       {
         min: 100,
@@ -808,13 +1141,30 @@
     const perfectBannerEl = document.getElementById("perfectBanner");
     const feedbackEl = document.getElementById("feedback");
     const restartBtnEl = document.getElementById("restartBtn");
+    const statsToggleEl = document.getElementById("statsToggle");
+    const hudEl = document.getElementById("hud");
     const shopEl = document.getElementById("shop");
     const shopToggleEl = document.getElementById("shopToggle");
     const shopPipsEl = document.getElementById("shopPips");
+    const facilitiesEl = document.getElementById("facilities");
+    const facilitiesToggleEl = document.getElementById("facilitiesToggle");
+    const facilityPipsEl = document.getElementById("facilityPips");
+    const prestigeEl = document.getElementById("prestige");
+    const prestigeToggleEl = document.getElementById("prestigeToggle");
+    const prestigePointsLabelEl = document.getElementById("prestigePointsLabel");
+    const prestigeSummaryEl = document.getElementById("prestigeSummary");
+    const prestigeGoEl = document.getElementById("prestigeGo");
+    const milestoneListEl = document.getElementById("milestoneList");
+    const shopIdleLabelEl = document.getElementById("shopIdleLabel");
     const upgradeListEl = document.getElementById("upgradeList");
+    const facilityListEl = document.getElementById("facilityList");
+    const ppLabelEl = document.getElementById("ppLabel");
 
     let state = loadState();
+    let statsVisible = loadStatsPref();
     let shopOpen = false;
+    let facilitiesOpen = false;
+    let prestigeOpen = false;
     let drawing = false;
     let startX = 0;
     let startY = 0;
@@ -833,6 +1183,9 @@
     let relicSpawnTimer = 3;
     let pipEvents = [];
     const PIPS_RATE_WINDOW = 10;
+    const OFFLINE_CAP_SEC = 60 * 60 * 8;
+    const MAX_PAST_RECTS = 200;
+    let idlePipBank = 0;
     let drawColor = PALETTE[0];
     let colorIndex = 0;
     let dpr = 1;
@@ -842,9 +1195,16 @@
     let lastFrame = performance.now();
     const RELIC_COLORS = ["#ffd60a", "#00f5d4", "#ff4d6d", "#3a86ff", "#fb5607"];
 
+    function emptyMilestoneTiers() {
+      const tiers = {};
+      for (const milestone of PRESTIGE_MILESTONES) tiers[milestone.id] = 0;
+      return tiers;
+    }
+
     function defaultState() {
       const levels = {};
       for (const def of UPGRADE_DEFS) levels[def.id] = 0;
+      for (const def of FACILITY_DEFS) levels[def.id] = 0;
       return {
         attempts: 0,
         total: 0,
@@ -852,7 +1212,15 @@
         last: null,
         pips: 0,
         crits: 0,
+        perfects: 0,
+        relicsCaught: 0,
+        pipsEarned: 0,
         levels,
+        lastActive: Date.now(),
+        prestigeCount: 0,
+        prestigePoints: 0,
+        runPrestigePoints: 0,
+        milestoneTiers: emptyMilestoneTiers(),
       };
     }
 
@@ -871,7 +1239,18 @@
           last: parsed.last == null ? null : Number(parsed.last),
           pips: Math.max(0, Number(parsed.pips) || 0),
           crits: Math.max(0, Number(parsed.crits) || 0),
+          perfects: Math.max(0, Number(parsed.perfects) || 0),
+          relicsCaught: Math.max(0, Number(parsed.relicsCaught) || 0),
+          pipsEarned: Math.max(0, Number(parsed.pipsEarned) || 0),
           levels,
+          lastActive: Number(parsed.lastActive) || Date.now(),
+          prestigeCount: Math.max(0, Number(parsed.prestigeCount) || 0),
+          prestigePoints: Math.max(0, Number(parsed.prestigePoints) || 0),
+          runPrestigePoints: Math.max(0, Number(parsed.runPrestigePoints) || 0),
+          milestoneTiers: {
+            ...base.milestoneTiers,
+            ...(parsed.milestoneTiers || {}),
+          },
         };
       } catch {
         return defaultState();
@@ -879,7 +1258,87 @@
     }
 
     function saveState() {
+      state.lastActive = Date.now();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function findBuyable(id) {
+      return (
+        UPGRADE_DEFS.find((entry) => entry.id === id) ||
+        FACILITY_DEFS.find((entry) => entry.id === id)
+      );
+    }
+
+    function getPrestigeBoosts() {
+      const pp = state.prestigePoints || 0;
+      return {
+        pipMult: 1 + pp * 0.06,
+        idleMult: 1 + pp * 0.08,
+        critFlat: approach(0.22, pp, 0.03),
+        startPips: Math.floor(pp * 40),
+      };
+    }
+
+    function totalUpgradeLevels() {
+      let total = 0;
+      for (const def of UPGRADE_DEFS) total += levelOf(def.id);
+      return total;
+    }
+
+    function totalFacilityLevels() {
+      let total = 0;
+      for (const def of FACILITY_DEFS) total += levelOf(def.id);
+      return total;
+    }
+
+    function getMilestoneStat(stat) {
+      if (stat === "upgradeLevels") return totalUpgradeLevels();
+      if (stat === "facilityLevels") return totalFacilityLevels();
+      return Number(state[stat]) || 0;
+    }
+
+    function milestoneThreshold(def) {
+      const tier = state.milestoneTiers[def.id] || 0;
+      const prestigeFactor = Math.pow(PRESTIGE_SCALE, state.prestigeCount || 0);
+      return Math.ceil(def.base * Math.pow(def.scale, tier) * prestigeFactor);
+    }
+
+    function getFacilityPipsPerSecond() {
+      let rate = 0;
+      for (const def of FACILITY_DEFS) {
+        rate += levelOf(def.id) * def.pipsPerSec;
+      }
+      return rate * getPrestigeBoosts().idleMult;
+    }
+
+    function applyOfflinePips() {
+      const rate = getFacilityPipsPerSecond();
+      if (rate <= 0) {
+        state.lastActive = Date.now();
+        return;
+      }
+      const elapsed = Math.max(0, (Date.now() - (state.lastActive || Date.now())) / 1000);
+      const credited = Math.min(elapsed, OFFLINE_CAP_SEC) * rate;
+      if (credited >= 1) {
+        state.pips += credited;
+        state.pipsEarned += credited;
+        recordPips(credited);
+      }
+      state.lastActive = Date.now();
+      saveState();
+    }
+
+    function updateIdlePips(dt) {
+      const rate = getFacilityPipsPerSecond();
+      if (rate <= 0) return;
+      idlePipBank += rate * dt;
+      if (idlePipBank >= 0.25) {
+        const gain = idlePipBank;
+        idlePipBank = 0;
+        state.pips += gain;
+        state.pipsEarned += gain;
+        recordPips(gain);
+      }
     }
 
     function levelOf(id) {
@@ -890,15 +1349,51 @@
       return levelOf("grid") > 0;
     }
 
+    function loadStatsPref() {
+      try {
+        const raw = localStorage.getItem(STATS_PREF_KEY);
+        if (raw == null) return true;
+        return raw === "1";
+      } catch {
+        return true;
+      }
+    }
+
+    function saveStatsPref() {
+      localStorage.setItem(STATS_PREF_KEY, statsVisible ? "1" : "0");
+    }
+
+    function syncStatsToggle() {
+      hudEl.classList.toggle("stats-collapsed", !statsVisible);
+      statsToggleEl.setAttribute("aria-pressed", statsVisible ? "true" : "false");
+      statsToggleEl.textContent = statsVisible ? "Stats on" : "Stats off";
+    }
+
+    function setStatsVisible(visible) {
+      statsVisible = visible;
+      saveStatsPref();
+      syncStatsToggle();
+    }
+
+    function toggleStats() {
+      setStatsVisible(!statsVisible);
+    }
+
     // Soft approach toward a cap so infinite levels keep mattering a little.
     function approach(cap, level, rate) {
       return cap * (1 - Math.exp(-level * rate));
     }
 
     function getEffects() {
-      const mult = 1 + levelOf("mult") * 0.15;
-      const critChance = approach(0.72, levelOf("critChance"), 0.045);
+      const prestige = getPrestigeBoosts();
+      const mult = (1 + levelOf("mult") * 0.15) * prestige.pipMult;
+      const critChance = Math.min(
+        0.85,
+        approach(0.72, levelOf("critChance"), 0.045) + prestige.critFlat
+      );
       const critPower = 2 + levelOf("critPower") * 0.35;
+      const forgiveProgress = softCapProgress(levelOf("forgive"), 0.12);
+      const guyForgiveProgress = softCapProgress(levelOf("guyForgive"), 0.11);
       const scorePower = Math.max(4.8, 10 - approach(5.2, levelOf("forgive"), 0.12));
       const pipBoost = 1 + levelOf("pipBoost") * 0.08;
       const guyCount = levelOf("guys");
@@ -907,7 +1402,10 @@
       const guyCooldown = Math.max(0.25, 2.4 - approach(2.15, levelOf("guySpeed"), 0.09));
       const guyMinRatio = 0.38 + approach(0.58, levelOf("guyAccuracy"), 0.06);
       const guyMult = 1 + levelOf("guyMult") * 0.2;
-      const guyCritChance = approach(0.65, levelOf("guyCrit"), 0.04);
+      const guyCritChance = Math.min(
+        0.8,
+        approach(0.65, levelOf("guyCrit"), 0.04) + prestige.critFlat * 0.75
+      );
       const guyCritPower = 2 + levelOf("guyCrit") * 0.2;
       const guyScorePower = Math.max(4.5, 10 - approach(5.5, levelOf("guyForgive"), 0.11));
       const relicsUnlocked = levelOf("relics") > 0;
@@ -927,6 +1425,8 @@
         mult,
         critChance,
         critPower,
+        forgiveProgress,
+        guyForgiveProgress,
         scorePower,
         pipBoost,
         guyCount,
@@ -1011,8 +1511,18 @@
       } else {
         auraLabelEl.textContent = "off";
       }
+      ppLabelEl.textContent = String(state.prestigePoints || 0);
       shopPipsEl.textContent = `${formatPips(state.pips)} pips`;
+      facilityPipsEl.textContent = `${formatPips(state.pips)} pips`;
+      prestigePointsLabelEl.textContent = `${state.prestigePoints || 0} PP`;
+      const idleRate = getFacilityPipsPerSecond();
+      shopIdleLabelEl.textContent =
+        idleRate > 0
+          ? `Idle ${formatPipsRate(idleRate)}/s`
+          : "Idle 0/s";
       renderUpgrades();
+      renderFacilities();
+      renderPrestige();
     }
 
     const GUY_UPGRADE_IDS = new Set([
@@ -1049,6 +1559,15 @@
       return null;
     }
 
+    function getFacilityLock(def) {
+      if (!def.requires) return null;
+      if (levelOf(def.requires) < 1) {
+        const req = FACILITY_DEFS.find((entry) => entry.id === def.requires);
+        return `Requires ${req ? req.name : "previous facility"}.`;
+      }
+      return null;
+    }
+
     function softCapProgress(level, rate) {
       return 1 - Math.exp(-level * rate);
     }
@@ -1061,60 +1580,174 @@
       return false;
     }
 
+    function appendBuyableButton(listEl, def, lockReason) {
+      const level = levelOf(def.id);
+      const locked = Boolean(lockReason);
+      const maxed = isMaxed(def);
+      const cost = upgradeCost(def);
+      const canBuy = !locked && !maxed && state.pips >= cost;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "upgrade";
+      btn.disabled = !canBuy;
+      const costLabel = locked
+        ? "LOCKED"
+        : maxed
+          ? def.maxLevel === 1
+            ? "OWNED"
+            : "MAX"
+          : `${formatPips(cost)} pips`;
+      let levelLabel = "Locked";
+      if (!locked) {
+        if (maxed && def.maxLevel === 1) {
+          levelLabel = "Unlocked";
+        } else if (def.softCapRate) {
+          const pct = Math.min(
+            100,
+            Math.round(softCapProgress(level, def.softCapRate) * 100)
+          );
+          levelLabel = maxed ? "100%" : `Lv ${level} · ${pct}%`;
+        } else if (def.pipsPerSec) {
+          const total = level * def.pipsPerSec;
+          levelLabel =
+            level > 0
+              ? `Lv ${level} · ${formatPipsRate(total)}/s`
+              : `Lv 0 · +${formatPipsRate(def.pipsPerSec)}/s each`;
+        } else {
+          levelLabel = `Lv ${level}`;
+        }
+      }
+      btn.innerHTML = `
+        <div class="upgrade-top">
+          <span class="upgrade-name">${def.name}</span>
+          <span class="upgrade-cost">${costLabel}</span>
+        </div>
+        <div class="upgrade-desc">${locked ? lockReason : def.desc}</div>
+        <div class="upgrade-level">${levelLabel}</div>
+      `;
+      btn.addEventListener("click", (event) => {
+        event.stopPropagation();
+        buyUpgrade(def.id);
+      });
+      listEl.appendChild(btn);
+    }
+
     function renderUpgrades() {
       upgradeListEl.innerHTML = "";
       for (const def of UPGRADE_DEFS) {
-        const level = levelOf(def.id);
-        const lockReason = getUpgradeLock(def.id);
-        const locked = Boolean(lockReason);
-        const maxed = isMaxed(def);
-        const cost = upgradeCost(def);
-        const canBuy = !locked && !maxed && state.pips >= cost;
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "upgrade";
-        btn.disabled = !canBuy;
-        const costLabel = locked
-          ? "LOCKED"
-          : maxed
-            ? def.maxLevel === 1
-              ? "OWNED"
-              : "MAX"
-            : `${formatPips(cost)} pips`;
-        let levelLabel = "Locked";
-        if (!locked) {
-          if (maxed && def.maxLevel === 1) {
-            levelLabel = "Unlocked";
-          } else if (def.softCapRate) {
-            const pct = Math.min(
-              100,
-              Math.round(softCapProgress(level, def.softCapRate) * 100)
-            );
-            levelLabel = maxed ? "100%" : `Lv ${level} · ${pct}%`;
-          } else {
-            levelLabel = `Lv ${level}`;
-          }
-        }
-        btn.innerHTML = `
-          <div class="upgrade-top">
-            <span class="upgrade-name">${def.name}</span>
-            <span class="upgrade-cost">${costLabel}</span>
-          </div>
-          <div class="upgrade-desc">${locked ? lockReason : def.desc}</div>
-          <div class="upgrade-level">${levelLabel}</div>
-        `;
-        btn.addEventListener("click", (event) => {
-          event.stopPropagation();
-          buyUpgrade(def.id);
-        });
-        upgradeListEl.appendChild(btn);
+        appendBuyableButton(upgradeListEl, def, getUpgradeLock(def.id));
       }
     }
 
-    function buyUpgrade(id) {
-      const def = UPGRADE_DEFS.find((entry) => entry.id === id);
+    function renderFacilities() {
+      facilityListEl.innerHTML = "";
+      for (const def of FACILITY_DEFS) {
+        appendBuyableButton(facilityListEl, def, getFacilityLock(def));
+      }
+    }
+
+    function formatMilestoneValue(value) {
+      if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
+      if (value >= 10_000) return `${(value / 1000).toFixed(1)}k`;
+      return String(Math.floor(value));
+    }
+
+    function renderPrestige() {
+      const boosts = getPrestigeBoosts();
+      prestigePointsLabelEl.textContent = `${state.prestigePoints || 0} PP`;
+      prestigeSummaryEl.innerHTML = `
+        Prestiges <strong>${state.prestigeCount || 0}</strong>
+        · Run PP <strong>${state.runPrestigePoints || 0}</strong><br/>
+        Pip boost <strong>${boosts.pipMult.toFixed(2)}x</strong>
+        · Idle <strong>${boosts.idleMult.toFixed(2)}x</strong>
+        · Crit <strong>+${Math.round(boosts.critFlat * 100)}%</strong><br/>
+        Next start <strong>${formatPips(boosts.startPips)}</strong> pips
+        · Milestone scale <strong>${PRESTIGE_SCALE}x</strong>/prestige
+      `;
+      prestigeGoEl.disabled = (state.runPrestigePoints || 0) < 1;
+      prestigeGoEl.textContent =
+        (state.runPrestigePoints || 0) < 1
+          ? "Claim a milestone to prestige"
+          : `Prestige (+${PRESTIGE_SCALE}x harder milestones)`;
+
+      milestoneListEl.innerHTML = "";
+      for (const def of PRESTIGE_MILESTONES) {
+        const current = getMilestoneStat(def.stat);
+        const need = milestoneThreshold(def);
+        const ready = current >= need;
+        const progress = Math.max(0, Math.min(1, current / need));
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `milestone${ready ? " ready" : ""}`;
+        btn.disabled = !ready;
+        btn.innerHTML = `
+          <div class="milestone-top">
+            <span class="milestone-name">${def.name}</span>
+            <span class="milestone-reward">+${def.points} PP</span>
+          </div>
+          <div class="milestone-bar"><div class="milestone-fill" style="width:${(progress * 100).toFixed(1)}%"></div></div>
+          <div class="milestone-meta">${formatMilestoneValue(current)} / ${formatMilestoneValue(need)} · Tier ${(state.milestoneTiers[def.id] || 0) + 1}</div>
+        `;
+        btn.addEventListener("click", (event) => {
+          event.stopPropagation();
+          claimMilestone(def.id);
+        });
+        milestoneListEl.appendChild(btn);
+      }
+    }
+
+    function claimMilestone(id) {
+      const def = PRESTIGE_MILESTONES.find((entry) => entry.id === id);
       if (!def) return;
-      if (getUpgradeLock(id)) return;
+      const need = milestoneThreshold(def);
+      if (getMilestoneStat(def.stat) < need) return;
+      state.milestoneTiers[id] = (state.milestoneTiers[id] || 0) + 1;
+      state.prestigePoints += def.points;
+      state.runPrestigePoints += def.points;
+      saveState();
+      updateHud();
+    }
+
+    function doPrestige() {
+      if ((state.runPrestigePoints || 0) < 1) return;
+      const ok = window.confirm(
+        `Prestige now?\n\nYou keep ${state.prestigePoints} prestige points and permanent boosts.\nThis run resets (pips, upgrades, facilities, board).\nMilestones restart at ${PRESTIGE_SCALE}x harder thresholds.`
+      );
+      if (!ok) return;
+
+      const keptPoints = state.prestigePoints;
+      const keptCount = (state.prestigeCount || 0) + 1;
+      state = defaultState();
+      state.prestigePoints = keptPoints;
+      state.prestigeCount = keptCount;
+      state.pips = getPrestigeBoosts().startPips;
+      pastRects = [];
+      clearingRects = [];
+      guys = [];
+      relics = [];
+      floatScores = [];
+      auraMult = 1;
+      auraTime = 0;
+      relicSpawnTimer = 3;
+      pipEvents = [];
+      idlePipBank = 0;
+      drawing = false;
+      canvas.style.cursor = "crosshair";
+      closeAllMenus();
+      saveState();
+      syncGuys();
+      updateHud();
+      hintEl.classList.remove("hidden");
+      redraw();
+    }
+
+    function buyUpgrade(id) {
+      const def = findBuyable(id);
+      if (!def) return;
+      const lockReason = def.pipsPerSec
+        ? getFacilityLock(def)
+        : getUpgradeLock(id);
+      if (lockReason) return;
       if (isMaxed(def)) return;
       const level = levelOf(id);
       const cost = upgradeCost(def);
@@ -1228,8 +1861,15 @@
 
     function activateRelicAura(fx, caughtCount) {
       if (caughtCount <= 0) return;
-      auraMult = fx.relicAuraMult * (1 + (caughtCount - 1) * 0.12);
+      auraMult = Math.pow(fx.relicAuraMult, caughtCount);
       auraTime = fx.relicAuraDuration;
+      canvas.style.cursor = "none";
+      updateHud();
+    }
+
+    function activatePerfectAura(fx) {
+      auraMult = Math.max(auraMult, fx.relicAuraMult);
+      auraTime = Math.max(auraTime, 2);
       canvas.style.cursor = "none";
       updateHud();
     }
@@ -1386,7 +2026,23 @@
       ctx.restore();
     }
 
+    function closeAllMenus() {
+      shopOpen = false;
+      facilitiesOpen = false;
+      prestigeOpen = false;
+      shopEl.classList.remove("open");
+      facilitiesEl.classList.remove("open");
+      prestigeEl.classList.remove("open");
+      shopEl.setAttribute("aria-hidden", "true");
+      facilitiesEl.setAttribute("aria-hidden", "true");
+      prestigeEl.setAttribute("aria-hidden", "true");
+      shopToggleEl.setAttribute("aria-pressed", "false");
+      facilitiesToggleEl.setAttribute("aria-pressed", "false");
+      prestigeToggleEl.setAttribute("aria-pressed", "false");
+    }
+
     function setShopOpen(open) {
+      if (open) closeAllMenus();
       shopOpen = open;
       shopEl.classList.toggle("open", open);
       shopEl.setAttribute("aria-hidden", open ? "false" : "true");
@@ -1395,6 +2051,31 @@
 
     function toggleShop() {
       setShopOpen(!shopOpen);
+    }
+
+    function setFacilitiesOpen(open) {
+      if (open) closeAllMenus();
+      facilitiesOpen = open;
+      facilitiesEl.classList.toggle("open", open);
+      facilitiesEl.setAttribute("aria-hidden", open ? "false" : "true");
+      facilitiesToggleEl.setAttribute("aria-pressed", open ? "true" : "false");
+    }
+
+    function toggleFacilities() {
+      setFacilitiesOpen(!facilitiesOpen);
+    }
+
+    function setPrestigeOpen(open) {
+      if (open) closeAllMenus();
+      prestigeOpen = open;
+      prestigeEl.classList.toggle("open", open);
+      prestigeEl.setAttribute("aria-hidden", open ? "false" : "true");
+      prestigeToggleEl.setAttribute("aria-pressed", open ? "true" : "false");
+      if (open) renderPrestige();
+    }
+
+    function togglePrestige() {
+      setPrestigeOpen(!prestigeOpen);
     }
 
     function nextColor() {
@@ -1434,10 +2115,24 @@
       return { left, top, width, height };
     }
 
+    function aspectRatio(width, height) {
+      return Math.min(width, height) / Math.max(width, height);
+    }
+
     function scoreRect(width, height, scorePower) {
       if (width < MIN_SIZE || height < MIN_SIZE) return null;
-      const ratio = Math.min(width, height) / Math.max(width, height);
-      return Math.round(Math.pow(ratio, scorePower) * 100);
+      return Math.round(Math.pow(aspectRatio(width, height), scorePower) * 100);
+    }
+
+    // Perfect window widens with forgiveness; also counts a curve score that rounds to 100.
+    function isPerfectScore(width, height, scorePower, forgiveProgress) {
+      if (width < MIN_SIZE || height < MIN_SIZE) return false;
+      const ratio = aspectRatio(width, height);
+      const progress = Math.max(0, Math.min(1, forgiveProgress || 0));
+      // 0% forgive: need ~99.95% ratio. 100% forgive: need ~97.5% ratio.
+      const minRatio = 0.9995 - progress * 0.0245;
+      if (ratio >= minRatio) return true;
+      return Math.pow(ratio, scorePower) * 100 >= 99.5;
     }
 
     function scoreColor(score) {
@@ -1680,21 +2375,13 @@
       return tier.lines[Math.floor(Math.random() * tier.lines.length)];
     }
 
-    function showFeedback(text, color) {
-      clearTimeout(feedbackTimer);
-      feedbackEl.textContent = text;
-      feedbackEl.style.color = color;
-      feedbackEl.classList.remove("hide", "show");
-      void feedbackEl.offsetWidth;
-      feedbackEl.classList.add("show");
-      feedbackTimer = setTimeout(() => {
-        feedbackEl.classList.add("hide");
-        feedbackEl.classList.remove("show");
-      }, 2400);
-    }
-
-    function showPerfectBanner() {
+    function showBanner(text, color) {
       clearTimeout(perfectTimer);
+      perfectBannerEl.textContent = text;
+      perfectBannerEl.style.color = color || "#00f5d4";
+      perfectBannerEl.style.textShadow = color
+        ? `0 0 24px ${color}, 0 0 60px ${color}`
+        : "0 0 24px rgba(0, 245, 212, 0.7), 0 0 60px rgba(0, 245, 212, 0.35)";
       perfectBannerEl.setAttribute("aria-hidden", "false");
       perfectBannerEl.classList.remove("hide", "show");
       void perfectBannerEl.offsetWidth;
@@ -1704,6 +2391,15 @@
         perfectBannerEl.classList.remove("show");
         perfectBannerEl.setAttribute("aria-hidden", "true");
       }, 1400);
+    }
+
+    function showFeedback(text, color) {
+      if (Math.random() >= 1 / 20) return;
+      showBanner(text, color);
+    }
+
+    function showPerfectBanner() {
+      showBanner("PERFECT!", "#00f5d4");
     }
 
     function startPerfectClear(keepRect) {
@@ -1739,20 +2435,30 @@
       const scored = rect;
 
       const power = fromGuy ? fx.guyScorePower : fx.scorePower;
-      const accuracy = scoreRect(scored.width, scored.height, power);
+      const forgiveProgress = fromGuy ? fx.guyForgiveProgress : fx.forgiveProgress;
+      let accuracy = scoreRect(scored.width, scored.height, power);
       if (accuracy == null) return null;
+
+      const perfect = isPerfectScore(
+        scored.width,
+        scored.height,
+        power,
+        forgiveProgress
+      );
+      if (perfect) accuracy = 100;
 
       const caught = collectRelicsInRect(rect);
       if (caught > 0) activateRelicAura(fx, caught);
+      if (perfect) activatePerfectAura(fx);
 
       const critChance = fromGuy ? fx.guyCritChance : fx.critChance;
       const critPower = fromGuy ? fx.guyCritPower : fx.critPower;
       const pipMult = fromGuy ? fx.mult * fx.guyMult : fx.mult;
       const activeAura = auraTime > 0 ? auraMult : 1;
-      const catchBurst = caught > 0 ? fx.relicCatchMult * caught : 1;
+      const catchBurst = caught > 0 ? Math.pow(fx.relicCatchMult, caught) : 1;
       const isCrit = Math.random() < critChance;
       const critFactor = isCrit ? critPower : 1;
-      // Score = pure square quality. Pips = economy after all multipliers.
+      // Score = square quality (forgiveness-aware). Pips = economy after multipliers.
       const earnedPips = Math.max(
         1,
         Math.round(
@@ -1767,10 +2473,13 @@
       );
 
       const kept = { ...scored, color };
-      if (accuracy === 100) {
+      if (perfect) {
         startPerfectClear(kept);
       } else {
         pastRects.push(kept);
+        if (pastRects.length > MAX_PAST_RECTS) {
+          pastRects.splice(0, pastRects.length - MAX_PAST_RECTS);
+        }
       }
 
       state.attempts += 1;
@@ -1778,8 +2487,11 @@
       state.last = accuracy;
       if (accuracy > state.best) state.best = accuracy;
       state.pips += earnedPips;
+      state.pipsEarned += earnedPips;
       recordPips(earnedPips);
       if (isCrit) state.crits += 1;
+      if (perfect) state.perfects += 1;
+      if (caught > 0) state.relicsCaught += caught;
       hintEl.classList.add("hidden");
 
       if (fromGuy) {
@@ -1797,6 +2509,7 @@
         if (state.attempts % 4 === 0) {
           saveState();
           renderUpgrades();
+          renderFacilities();
         }
       } else {
         saveState();
@@ -1807,28 +2520,24 @@
       const cy = scored.top + scored.height / 2;
       const tint = caught > 0 ? "#ffd60a" : isCrit ? "#ffd60a" : scoreColor(accuracy);
 
-      if (announce) {
-        if (accuracy === 100) {
-          showFeedback("Board cleared.", "#00f5d4");
-        } else {
-          const flashLabel =
-            caught > 0
-              ? `RELIC +${formatPips(earnedPips)}`
-              : isCrit
-                ? `CRIT +${formatPips(earnedPips)}`
-                : `+${formatPips(earnedPips)}`;
-          showFlash(flashLabel, cx, cy, tint, isCrit || caught > 0);
-          const line =
-            caught > 0
-              ? caught > 1
-                ? "Multi-relic cage!"
-                : "Relic squared in!"
-              : isCrit
-                ? CRIT_FEEDBACK[Math.floor(Math.random() * CRIT_FEEDBACK.length)]
-                : feedbackForScore(accuracy);
-          showFeedback(line, tint);
-        }
-      } else if (accuracy !== 100) {
+      if (announce && !perfect) {
+        const flashLabel =
+          caught > 0
+            ? `RELIC +${formatPips(earnedPips)}`
+            : isCrit
+              ? `CRIT +${formatPips(earnedPips)}`
+              : `+${formatPips(earnedPips)}`;
+        showFlash(flashLabel, cx, cy, tint, isCrit || caught > 0);
+        const line =
+          caught > 0
+            ? caught > 1
+              ? "Multi-relic cage!"
+              : "Relic squared in!"
+            : isCrit
+              ? CRIT_FEEDBACK[Math.floor(Math.random() * CRIT_FEEDBACK.length)]
+              : feedbackForScore(accuracy);
+        showFeedback(line, tint);
+      } else if (!announce && !perfect) {
         floatScores.push({
           x: cx - 10,
           y: cy,
@@ -1921,10 +2630,22 @@
       updateGuys(dt);
       updateRelics(dt);
       updateClearingRects(dt);
+      updateIdlePips(dt);
       pipsRateTick += dt;
       if (pipsRateTick >= 0.5) {
         pipsRateTick = 0;
+        pipsValueEl.textContent = formatPips(state.pips);
+        shopPipsEl.textContent = `${formatPips(state.pips)} pips`;
+        facilityPipsEl.textContent = `${formatPips(state.pips)} pips`;
         updatePipsRate();
+        if (facilitiesOpen) {
+          const idleRate = getFacilityPipsPerSecond();
+          shopIdleLabelEl.textContent =
+            idleRate > 0
+              ? `Idle ${formatPipsRate(idleRate)}/s`
+              : "Idle 0/s";
+        }
+        if (prestigeOpen) renderPrestige();
       }
       redraw();
       requestAnimationFrame(tick);
@@ -1938,7 +2659,7 @@
     }
 
     function onPointerDown(event) {
-      if (event.target.closest(".shop, .hud-btn, .upgrade")) return;
+      if (event.target.closest(".shop, .hud-btn, .upgrade, #facilities, #prestige, .milestone, .prestige-go")) return;
       event.preventDefault();
       trackPointer(event);
       drawing = true;
@@ -1985,7 +2706,7 @@
       relicSpawnTimer = 3;
       pipEvents = [];
       drawing = false;
-      setShopOpen(false);
+      closeAllMenus();
       saveState();
       syncGuys();
       updateHud();
@@ -2007,12 +2728,34 @@
     window.addEventListener("resize", resize);
     window.addEventListener("keydown", (event) => {
       if (event.key === "u" || event.key === "U") toggleShop();
-      if (event.key === "Escape" && shopOpen) setShopOpen(false);
+      if (event.key === "f" || event.key === "F") toggleFacilities();
+      if (event.key === "p" || event.key === "P") togglePrestige();
+      if (event.key === "Escape") closeAllMenus();
     });
 
     shopToggleEl.addEventListener("click", (event) => {
       event.stopPropagation();
       toggleShop();
+    });
+
+    facilitiesToggleEl.addEventListener("click", (event) => {
+      event.stopPropagation();
+      toggleFacilities();
+    });
+
+    prestigeToggleEl.addEventListener("click", (event) => {
+      event.stopPropagation();
+      togglePrestige();
+    });
+
+    prestigeGoEl.addEventListener("click", (event) => {
+      event.stopPropagation();
+      doPrestige();
+    });
+
+    statsToggleEl.addEventListener("click", (event) => {
+      event.stopPropagation();
+      toggleStats();
     });
 
     restartBtnEl.addEventListener("click", (event) => {
@@ -2024,7 +2767,9 @@
       saveState();
     });
 
+    syncStatsToggle();
     syncGuys();
+    applyOfflinePips();
     updateHud();
     resize();
     requestAnimationFrame(tick);
