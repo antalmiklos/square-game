@@ -291,7 +291,7 @@
   <div class="score-flash" id="scoreFlash"></div>
   <div class="footer">
     <span class="footer-hint">Almost square barely counts · R reset · G grid</span>
-    <button type="button" class="hud-btn" id="gridToggle" aria-pressed="true">Grid</button>
+    <button type="button" class="hud-btn" id="gridToggle" aria-pressed="false">Grid off</button>
     <button type="button" class="hud-btn reset" id="resetBtn">Reset</button>
   </div>
 
@@ -321,7 +321,7 @@
     let startY = 0;
     let currentX = 0;
     let currentY = 0;
-    let lastRect = null;
+    let pastRects = [];
     let drawColor = PALETTE[0];
     let colorIndex = 0;
     let dpr = 1;
@@ -350,10 +350,10 @@
     function loadGridPref() {
       try {
         const raw = localStorage.getItem(GRID_PREF_KEY);
-        if (raw == null) return true;
+        if (raw == null) return false;
         return raw === "1";
       } catch {
-        return true;
+        return false;
       }
     }
 
@@ -476,13 +476,13 @@
       ctx.clearRect(0, 0, w, h);
       if (showGrid) drawGrid(w, h);
 
-      if (lastRect) {
-        ctx.strokeStyle = lastRect.color || "rgba(255, 255, 255, 0.2)";
-        ctx.globalAlpha = 0.35;
+      for (const past of pastRects) {
+        ctx.strokeStyle = past.color || "rgba(255, 255, 255, 0.2)";
+        ctx.globalAlpha = 0.45;
         ctx.lineWidth = 2;
-        ctx.strokeRect(lastRect.left, lastRect.top, lastRect.width, lastRect.height);
-        ctx.globalAlpha = 1;
+        ctx.strokeRect(past.left, past.top, past.width, past.height);
       }
+      ctx.globalAlpha = 1;
 
       if (drawing) {
         const rect = normalizeRect(startX, startY, currentX, currentY);
@@ -522,7 +522,7 @@
         return;
       }
 
-      lastRect = { ...rect, color: drawColor };
+      pastRects.push({ ...rect, color: drawColor });
       stats.attempts += 1;
       stats.total += score;
       stats.last = score;
@@ -567,7 +567,7 @@
 
     function resetStats() {
       stats = { attempts: 0, total: 0, best: 0, last: null };
-      lastRect = null;
+      pastRects = [];
       saveStats();
       updateHud();
       hintEl.classList.remove("hidden");
