@@ -168,6 +168,43 @@
         transform 400ms ease-out;
     }
 
+    .feedback {
+      position: fixed;
+      left: 50%;
+      bottom: 4.25rem;
+      z-index: 4;
+      pointer-events: none;
+      max-width: min(90vw, 22rem);
+      padding: 0.65rem 1.1rem;
+      border-radius: 999px;
+      background: rgba(28, 24, 38, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      color: var(--ink);
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      text-align: center;
+      opacity: 0;
+      transform: translate(-50%, 120%) scale(0.96);
+      transition:
+        opacity 280ms ease-out,
+        transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .feedback.show {
+      opacity: 1;
+      transform: translate(-50%, 0) scale(1);
+    }
+
+    .feedback.hide {
+      opacity: 0;
+      transform: translate(-50%, -28%) scale(0.98);
+      transition:
+        opacity 360ms ease-out,
+        transform 360ms ease-out;
+    }
+
     .footer {
       position: fixed;
       bottom: 1.25rem;
@@ -257,6 +294,11 @@
       .footer {
         bottom: 1rem;
       }
+
+      .feedback {
+        bottom: 3.75rem;
+        font-size: 0.88rem;
+      }
     }
   </style>
 </head>
@@ -289,6 +331,7 @@
   </div>
 
   <div class="score-flash" id="scoreFlash"></div>
+  <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
   <div class="footer">
     <span class="footer-hint">Almost square barely counts · R reset · G grid</span>
     <button type="button" class="hud-btn" id="gridToggle" aria-pressed="false">Grid off</button>
@@ -311,8 +354,108 @@
     const bestScoreEl = document.getElementById("bestScore");
     const attemptsEl = document.getElementById("attempts");
     const flashEl = document.getElementById("scoreFlash");
+    const feedbackEl = document.getElementById("feedback");
     const gridToggleEl = document.getElementById("gridToggle");
     const resetBtnEl = document.getElementById("resetBtn");
+
+    const FEEDBACK = [
+      {
+        min: 100,
+        lines: [
+          "Perfect square.",
+          "Geometry itself.",
+          "Unreal.",
+          "Chef's kiss.",
+          "That was surgical.",
+          "Museum piece.",
+          "Absolute unit of a square.",
+        ],
+      },
+      {
+        min: 95,
+        lines: [
+          "Square royalty.",
+          "Ridiculous.",
+          "How.",
+          "Nearly mythical.",
+          "You're dialed in.",
+          "Scary good.",
+          "Save that one.",
+        ],
+      },
+      {
+        min: 90,
+        lines: [
+          "So close.",
+          "Almost sacred.",
+          "One pixel off.",
+          "Hairline miss.",
+          "Agonizingly close.",
+          "The square gods nodded.",
+          "99 problems, 1 ratio.",
+        ],
+      },
+      {
+        min: 80,
+        lines: [
+          "Respectable.",
+          "Getting warm.",
+          "Not bad at all.",
+          "Solid attempt.",
+          "Square-adjacent.",
+          "I'll allow it.",
+          "Promising shape.",
+        ],
+      },
+      {
+        min: 60,
+        lines: [
+          "Trying vibes.",
+          "Soft rectangle.",
+          "Keep going.",
+          "Mid square.",
+          "Close-ish.",
+          "Room for geometry.",
+          "Practice mode unlocked.",
+        ],
+      },
+      {
+        min: 40,
+        lines: [
+          "That's a door.",
+          "Oblong energy.",
+          "Hmm.",
+          "More of a window.",
+          "Stretch goals.",
+          "Rectangle supremacy.",
+          "Proportion? Never heard of her.",
+        ],
+      },
+      {
+        min: 20,
+        lines: [
+          "Boldly rectangular.",
+          "Nope.",
+          "Wide boy.",
+          "That's a pancake.",
+          "Commitment to the bit.",
+          "Sides are suggestions.",
+          "Abstract art.",
+        ],
+      },
+      {
+        min: 0,
+        lines: [
+          "A line with ambition.",
+          "Chaos.",
+          "Were you blinking?",
+          "A tragic scribble.",
+          "Even the grid is judging.",
+          "Geometry left the chat.",
+          "Try opening your eyes.",
+        ],
+      },
+    ];
 
     let stats = loadStats();
     let showGrid = loadGridPref();
@@ -326,6 +469,7 @@
     let colorIndex = 0;
     let dpr = 1;
     let flashTimer = null;
+    let feedbackTimer = null;
 
     function loadStats() {
       try {
@@ -510,6 +654,24 @@
       }, 700);
     }
 
+    function feedbackForScore(score) {
+      const tier = FEEDBACK.find((entry) => score >= entry.min) || FEEDBACK[FEEDBACK.length - 1];
+      return tier.lines[Math.floor(Math.random() * tier.lines.length)];
+    }
+
+    function showFeedback(score) {
+      clearTimeout(feedbackTimer);
+      feedbackEl.textContent = feedbackForScore(score);
+      feedbackEl.style.color = scoreColor(score);
+      feedbackEl.classList.remove("hide", "show");
+      void feedbackEl.offsetWidth;
+      feedbackEl.classList.add("show");
+      feedbackTimer = setTimeout(() => {
+        feedbackEl.classList.add("hide");
+        feedbackEl.classList.remove("show");
+      }, 2400);
+    }
+
     function finishDraw() {
       if (!drawing) return;
       drawing = false;
@@ -534,6 +696,7 @@
       const cx = rect.left + rect.width / 2;
       const cy = rect.top + rect.height / 2;
       showFlash(score, cx, cy);
+      showFeedback(score);
       redraw();
     }
 
