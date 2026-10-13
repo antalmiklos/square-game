@@ -100,10 +100,22 @@
       opacity: 0;
     }
 
+    .meta-line {
+      margin-top: 0.55rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .meta-line strong {
+      color: var(--c2);
+      font-weight: 600;
+    }
+
     .stats {
       display: grid;
-      grid-template-columns: repeat(4, auto);
-      gap: 1.25rem 1.75rem;
+      grid-template-columns: repeat(3, auto);
+      gap: 1rem 1.5rem;
       background: var(--panel);
       backdrop-filter: blur(10px);
       padding: 0.75rem 1rem;
@@ -139,6 +151,8 @@
     .stat:nth-child(2) .stat-value { color: var(--c2); }
     .stat:nth-child(3) .stat-value { color: var(--c3); }
     .stat:nth-child(4) .stat-value { color: var(--c6); }
+    .stat:nth-child(5) .stat-value { color: var(--c5); }
+    .stat:nth-child(6) .stat-value { color: #b8c0ff; }
 
     .score-flash {
       position: fixed;
@@ -166,6 +180,44 @@
       transition:
         opacity 400ms ease-out,
         transform 400ms ease-out;
+    }
+
+    .score-flash.crit {
+      font-size: 2.35rem;
+      text-shadow: 0 0 28px currentColor, 0 0 48px rgba(255, 214, 10, 0.45);
+    }
+
+    .perfect-banner {
+      position: fixed;
+      left: 50%;
+      top: 46%;
+      z-index: 6;
+      pointer-events: none;
+      font-size: clamp(2.8rem, 10vw, 5.5rem);
+      font-weight: 600;
+      letter-spacing: -0.06em;
+      color: #00f5d4;
+      text-shadow:
+        0 0 24px rgba(0, 245, 212, 0.7),
+        0 0 60px rgba(0, 245, 212, 0.35);
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.72);
+      transition:
+        opacity 280ms ease-out,
+        transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .perfect-banner.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .perfect-banner.hide {
+      opacity: 0;
+      transform: translate(-50%, -58%) scale(1.08);
+      transition:
+        opacity 420ms ease-out,
+        transform 420ms ease-out;
     }
 
     .feedback {
@@ -203,6 +255,120 @@
       transition:
         opacity 360ms ease-out,
         transform 360ms ease-out;
+    }
+
+    .shop {
+      position: fixed;
+      top: 50%;
+      left: 1rem;
+      transform: translateY(-50%) translateX(-110%);
+      z-index: 5;
+      width: min(20rem, calc(100vw - 2rem));
+      max-height: min(36rem, calc(100vh - 6rem));
+      overflow: auto;
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+      padding: 1rem;
+      pointer-events: auto;
+      transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .shop.open {
+      transform: translateY(-50%) translateX(0);
+    }
+
+    .shop-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .shop-title {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .shop-pips {
+      font-size: 0.85rem;
+      color: var(--c2);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .upgrade {
+      width: 100%;
+      text-align: left;
+      appearance: none;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--ink);
+      font: inherit;
+      border-radius: 10px;
+      padding: 0.7rem 0.75rem;
+      margin-bottom: 0.55rem;
+      cursor: pointer;
+      transition:
+        border-color 160ms ease-out,
+        background 160ms ease-out,
+        transform 100ms ease-out,
+        opacity 160ms ease-out;
+    }
+
+    .upgrade:last-child {
+      margin-bottom: 0;
+    }
+
+    .upgrade:hover:not(:disabled) {
+      border-color: rgba(0, 245, 212, 0.4);
+      background: rgba(0, 245, 212, 0.06);
+    }
+
+    .upgrade:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .upgrade:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .upgrade-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .upgrade-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .upgrade-cost {
+      font-size: 0.78rem;
+      color: var(--c2);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .upgrade-desc {
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .upgrade-level {
+      margin-top: 0.3rem;
+      font-size: 0.68rem;
+      color: var(--c6);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
 
     .footer {
@@ -259,12 +425,12 @@
       background: rgba(0, 245, 212, 0.1);
     }
 
-    .hud-btn.reset:hover {
+    .hud-btn.restart:hover {
       color: var(--c1);
       border-color: rgba(255, 77, 109, 0.45);
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 720px) {
       .hud {
         flex-direction: column;
         align-items: stretch;
@@ -272,7 +438,7 @@
       }
 
       .stats {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 0.75rem;
         width: 100%;
         padding: 0.65rem 0.75rem;
@@ -299,6 +465,18 @@
         bottom: 3.75rem;
         font-size: 0.88rem;
       }
+
+      .shop {
+        top: auto;
+        bottom: 3.5rem;
+        left: 50%;
+        transform: translateX(-50%) translateY(120%);
+        max-height: 55vh;
+      }
+
+      .shop.open {
+        transform: translateX(-50%) translateY(0);
+      }
     }
   </style>
 </head>
@@ -309,6 +487,12 @@
     <div>
       <div class="brand">Square</div>
       <div class="hint" id="hint">Click and drag to draw a square</div>
+      <div class="meta-line" id="metaLine">
+        Mult <strong id="multLabel">1.00x</strong>
+        · Crit <strong id="critLabel">0%</strong>
+        · Guys <strong id="guysLabel">0</strong>
+        · Aura <strong id="auraLabel">off</strong>
+      </div>
     </div>
     <div class="stats">
       <div class="stat">
@@ -316,12 +500,24 @@
         <span class="stat-value" id="lastScore">—</span>
       </div>
       <div class="stat">
-        <span class="stat-label">Avg</span>
-        <span class="stat-value" id="avgScore">—</span>
+        <span class="stat-label">Pips</span>
+        <span class="stat-value" id="pipsValue">0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Pips/s</span>
+        <span class="stat-value" id="pipsRate">0</span>
       </div>
       <div class="stat">
         <span class="stat-label">Best</span>
         <span class="stat-value" id="bestScore">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Avg</span>
+        <span class="stat-value" id="avgScore">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Crits</span>
+        <span class="stat-value" id="critsValue">0</span>
       </div>
       <div class="stat">
         <span class="stat-label">Tries</span>
@@ -330,33 +526,162 @@
     </div>
   </div>
 
+  <aside class="shop" id="shop" aria-hidden="true">
+    <div class="shop-head">
+      <div class="shop-title">Upgrades</div>
+      <div class="shop-pips" id="shopPips">0 pips</div>
+    </div>
+    <div id="upgradeList"></div>
+  </aside>
+
   <div class="score-flash" id="scoreFlash"></div>
+  <div class="perfect-banner" id="perfectBanner" aria-hidden="true">PERFECT!</div>
   <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
   <div class="footer">
-    <span class="footer-hint">Almost square barely counts · R reset · G grid</span>
-    <button type="button" class="hud-btn" id="gridToggle" aria-pressed="false">Grid off</button>
-    <button type="button" class="hud-btn reset" id="resetBtn">Reset</button>
+    <span class="footer-hint">Square in relics · U shop</span>
+    <button type="button" class="hud-btn" id="shopToggle" aria-pressed="false">Shop</button>
+    <button type="button" class="hud-btn restart" id="restartBtn">Restart</button>
   </div>
 
   <script>
-    const STORAGE_KEY = "square-game-stats-v2";
-    const GRID_PREF_KEY = "square-game-grid-v1";
+    const STORAGE_KEY = "square-game-state-v3";
     const MIN_SIZE = 24;
     const GRID_SIZE = 50;
     const GRID_MAJOR = 100;
     const PALETTE = ["#ff4d6d", "#ffd60a", "#2ec4b6", "#7b2cbf", "#fb5607", "#00f5d4", "#ff006e", "#3a86ff"];
 
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
-    const hintEl = document.getElementById("hint");
-    const lastScoreEl = document.getElementById("lastScore");
-    const avgScoreEl = document.getElementById("avgScore");
-    const bestScoreEl = document.getElementById("bestScore");
-    const attemptsEl = document.getElementById("attempts");
-    const flashEl = document.getElementById("scoreFlash");
-    const feedbackEl = document.getElementById("feedback");
-    const gridToggleEl = document.getElementById("gridToggle");
-    const resetBtnEl = document.getElementById("resetBtn");
+    const UPGRADE_DEFS = [
+      {
+        id: "mult",
+        name: "Score Mult",
+        desc: "+0.15x pips earned per level.",
+        baseCost: 40,
+        costScale: 1.85,
+      },
+      {
+        id: "critChance",
+        name: "Crit Chance",
+        desc: "+2.5% chance to crit each draw.",
+        baseCost: 60,
+        costScale: 1.9,
+      },
+      {
+        id: "critPower",
+        name: "Crit Power",
+        desc: "+0.35x on critical hits (base 2.0x).",
+        baseCost: 90,
+        costScale: 1.95,
+      },
+      {
+        id: "forgive",
+        name: "Forgiveness",
+        desc: "Softer scoring curve. Caps at 100%.",
+        baseCost: 120,
+        costScale: 1.4,
+        softCapRate: 0.12,
+      },
+      {
+        id: "pipBoost",
+        name: "Pip Magnet",
+        desc: "+8% pips earned per level.",
+        baseCost: 50,
+        costScale: 1.8,
+      },
+      {
+        id: "grid",
+        name: "Guide Grid",
+        desc: "Unlock a background guide grid.",
+        baseCost: 100000000,
+        costScale: 1,
+        maxLevel: 1,
+      },
+      {
+        id: "guys",
+        name: "Little Guys",
+        desc: "Hire a tiny helper that draws for you.",
+        baseCost: 10000,
+        costScale: 2.15,
+      },
+      {
+        id: "guySpeed",
+        name: "Guy Speed",
+        desc: "Helpers move and draw faster.",
+        baseCost: 80,
+        costScale: 1.75,
+      },
+      {
+        id: "guyAccuracy",
+        name: "Guy Accuracy",
+        desc: "Helpers draw closer to true squares.",
+        baseCost: 100,
+        costScale: 1.75,
+      },
+      {
+        id: "guyMult",
+        name: "Guy Score Mult",
+        desc: "+0.20x pips on helper draws only.",
+        baseCost: 450,
+        costScale: 1.85,
+      },
+      {
+        id: "guyCrit",
+        name: "Guy Crit",
+        desc: "+2% crit chance and +0.2x crit power for helpers.",
+        baseCost: 550,
+        costScale: 1.85,
+      },
+      {
+        id: "guyForgive",
+        name: "Guy Forgiveness",
+        desc: "Softer scoring for helpers. Caps at 100%.",
+        baseCost: 650,
+        costScale: 1.38,
+        softCapRate: 0.11,
+      },
+      {
+        id: "relics",
+        name: "Drift Relics",
+        desc: "One-time unlock for slowly floating relics. Square them in for a huge mult.",
+        baseCost: 15000,
+        costScale: 1,
+        maxLevel: 1,
+      },
+      {
+        id: "relicPower",
+        name: "Relic Power",
+        desc: "+0.35x aura mult when you square a relic in.",
+        baseCost: 700,
+        costScale: 1.85,
+      },
+      {
+        id: "relicDuration",
+        name: "Relic Duration",
+        desc: "+0.75s aura duration per level.",
+        baseCost: 550,
+        costScale: 1.8,
+      },
+      {
+        id: "relicSpawn",
+        name: "Relic Swarm",
+        desc: "More relics on screen, faster spawns.",
+        baseCost: 650,
+        costScale: 1.85,
+      },
+      {
+        id: "relicCatch",
+        name: "Relic Catch Mult",
+        desc: "+0.35x pips on the draw that cages a relic.",
+        baseCost: 800,
+        costScale: 1.9,
+      },
+      {
+        id: "relicSlow",
+        name: "Relic Drift",
+        desc: "Relics float slower and are easier to cage.",
+        baseCost: 400,
+        costScale: 1.75,
+      },
+    ];
 
     const FEEDBACK = [
       {
@@ -457,68 +782,178 @@
       },
     ];
 
-    let stats = loadStats();
-    let showGrid = loadGridPref();
+    const CRIT_FEEDBACK = [
+      "CRITICAL SQUARE!",
+      "CRIT! Geometry goes hard.",
+      "Jackpot proportions.",
+      "Lucky perfect-ish.",
+      "CRIT hit the ratio.",
+    ];
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const hintEl = document.getElementById("hint");
+    const lastScoreEl = document.getElementById("lastScore");
+    const avgScoreEl = document.getElementById("avgScore");
+    const bestScoreEl = document.getElementById("bestScore");
+    const attemptsEl = document.getElementById("attempts");
+    const pipsValueEl = document.getElementById("pipsValue");
+    const pipsRateEl = document.getElementById("pipsRate");
+    const critsValueEl = document.getElementById("critsValue");
+    const multLabelEl = document.getElementById("multLabel");
+    const critLabelEl = document.getElementById("critLabel");
+    const guysLabelEl = document.getElementById("guysLabel");
+    const auraLabelEl = document.getElementById("auraLabel");
+    const flashEl = document.getElementById("scoreFlash");
+    const perfectBannerEl = document.getElementById("perfectBanner");
+    const feedbackEl = document.getElementById("feedback");
+    const restartBtnEl = document.getElementById("restartBtn");
+    const shopEl = document.getElementById("shop");
+    const shopToggleEl = document.getElementById("shopToggle");
+    const shopPipsEl = document.getElementById("shopPips");
+    const upgradeListEl = document.getElementById("upgradeList");
+
+    let state = loadState();
+    let shopOpen = false;
     let drawing = false;
     let startX = 0;
     let startY = 0;
     let currentX = 0;
     let currentY = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+    let pointerOnCanvas = false;
     let pastRects = [];
+    let clearingRects = [];
+    let guys = [];
+    let relics = [];
+    let floatScores = [];
+    let auraMult = 1;
+    let auraTime = 0;
+    let relicSpawnTimer = 3;
+    let pipEvents = [];
+    const PIPS_RATE_WINDOW = 10;
     let drawColor = PALETTE[0];
     let colorIndex = 0;
     let dpr = 1;
     let flashTimer = null;
     let feedbackTimer = null;
+    let perfectTimer = null;
+    let lastFrame = performance.now();
+    const RELIC_COLORS = ["#ffd60a", "#00f5d4", "#ff4d6d", "#3a86ff", "#fb5607"];
 
-    function loadStats() {
+    function defaultState() {
+      const levels = {};
+      for (const def of UPGRADE_DEFS) levels[def.id] = 0;
+      return {
+        attempts: 0,
+        total: 0,
+        best: 0,
+        last: null,
+        pips: 0,
+        crits: 0,
+        levels,
+      };
+    }
+
+    function loadState() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return { attempts: 0, total: 0, best: 0, last: null };
+        if (!raw) return defaultState();
         const parsed = JSON.parse(raw);
+        const base = defaultState();
+        const levels = { ...base.levels, ...(parsed.levels || {}) };
+        if (levels.relics > 1) levels.relics = 1;
         return {
           attempts: Number(parsed.attempts) || 0,
           total: Number(parsed.total) || 0,
           best: Number(parsed.best) || 0,
           last: parsed.last == null ? null : Number(parsed.last),
+          pips: Math.max(0, Number(parsed.pips) || 0),
+          crits: Math.max(0, Number(parsed.crits) || 0),
+          levels,
         };
       } catch {
-        return { attempts: 0, total: 0, best: 0, last: null };
+        return defaultState();
       }
     }
 
-    function saveStats() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
 
-    function loadGridPref() {
-      try {
-        const raw = localStorage.getItem(GRID_PREF_KEY);
-        if (raw == null) return false;
-        return raw === "1";
-      } catch {
-        return false;
-      }
+    function levelOf(id) {
+      return state.levels[id] || 0;
     }
 
-    function saveGridPref() {
-      localStorage.setItem(GRID_PREF_KEY, showGrid ? "1" : "0");
+    function gridUnlocked() {
+      return levelOf("grid") > 0;
     }
 
-    function syncGridToggle() {
-      gridToggleEl.setAttribute("aria-pressed", showGrid ? "true" : "false");
-      gridToggleEl.textContent = showGrid ? "Grid on" : "Grid off";
+    // Soft approach toward a cap so infinite levels keep mattering a little.
+    function approach(cap, level, rate) {
+      return cap * (1 - Math.exp(-level * rate));
     }
 
-    function setGridVisible(visible) {
-      showGrid = visible;
-      saveGridPref();
-      syncGridToggle();
-      redraw();
+    function getEffects() {
+      const mult = 1 + levelOf("mult") * 0.15;
+      const critChance = approach(0.72, levelOf("critChance"), 0.045);
+      const critPower = 2 + levelOf("critPower") * 0.35;
+      const scorePower = Math.max(4.8, 10 - approach(5.2, levelOf("forgive"), 0.12));
+      const pipBoost = 1 + levelOf("pipBoost") * 0.08;
+      const guyCount = levelOf("guys");
+      const guySpeed = 55 + levelOf("guySpeed") * 22;
+      const guyDrawTime = Math.max(0.18, 0.95 - approach(0.77, levelOf("guySpeed"), 0.08));
+      const guyCooldown = Math.max(0.25, 2.4 - approach(2.15, levelOf("guySpeed"), 0.09));
+      const guyMinRatio = 0.38 + approach(0.58, levelOf("guyAccuracy"), 0.06);
+      const guyMult = 1 + levelOf("guyMult") * 0.2;
+      const guyCritChance = approach(0.65, levelOf("guyCrit"), 0.04);
+      const guyCritPower = 2 + levelOf("guyCrit") * 0.2;
+      const guyScorePower = Math.max(4.5, 10 - approach(5.5, levelOf("guyForgive"), 0.11));
+      const relicsUnlocked = levelOf("relics") > 0;
+      const relicAuraMult = 1.75 + levelOf("relicPower") * 0.35;
+      const relicAuraDuration = 3 + levelOf("relicDuration") * 0.75;
+      const relicMax = relicsUnlocked ? 1 + levelOf("relicSpawn") : 0;
+      const relicSpawnInterval = Math.max(
+        2.2,
+        14 - approach(11.8, levelOf("relicSpawn"), 0.12)
+      );
+      const relicCatchMult = 1.5 + levelOf("relicCatch") * 0.35;
+      const relicSpeed = Math.max(
+        28,
+        72 - approach(44, levelOf("relicSlow"), 0.1)
+      );
+      return {
+        mult,
+        critChance,
+        critPower,
+        scorePower,
+        pipBoost,
+        guyCount,
+        guySpeed,
+        guyDrawTime,
+        guyCooldown,
+        guyMinRatio,
+        guyMult,
+        guyCritChance,
+        guyCritPower,
+        guyScorePower,
+        relicsUnlocked,
+        relicAuraMult,
+        relicAuraDuration,
+        relicMax,
+        relicSpawnInterval,
+        relicCatchMult,
+        relicSpeed,
+      };
     }
 
-    function toggleGrid() {
-      setGridVisible(!showGrid);
+    function upgradeCost(def) {
+      const level = levelOf(def.id);
+      // Exponential with a mild quadratic kick so late levels hurt more.
+      const exp = def.baseCost * Math.pow(def.costScale, level);
+      const kick = 1 + level * level * 0.012;
+      return Math.round(exp * kick);
     }
 
     function formatScore(value) {
@@ -526,12 +961,440 @@
       return String(Math.round(value));
     }
 
+    function formatPips(value) {
+      if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
+      if (value >= 10_000) return `${(value / 1000).toFixed(1)}k`;
+      return String(Math.floor(value));
+    }
+
+    function formatPipsRate(value) {
+      if (value >= 1000) return `${(value / 1000).toFixed(1)}k`;
+      if (value >= 10) return String(Math.round(value));
+      if (value >= 1) return value.toFixed(1);
+      return value.toFixed(2);
+    }
+
+    function recordPips(amount) {
+      if (amount <= 0) return;
+      pipEvents.push({ t: performance.now(), amount });
+    }
+
+    function getPipsPerSecond() {
+      const now = performance.now();
+      const cutoff = now - PIPS_RATE_WINDOW * 1000;
+      while (pipEvents.length && pipEvents[0].t < cutoff) pipEvents.shift();
+      if (!pipEvents.length) return 0;
+      const total = pipEvents.reduce((sum, event) => sum + event.amount, 0);
+      const span = Math.max((now - pipEvents[0].t) / 1000, 1);
+      return total / span;
+    }
+
+    function updatePipsRate() {
+      pipsRateEl.textContent = formatPipsRate(getPipsPerSecond());
+    }
+
     function updateHud() {
-      lastScoreEl.textContent = formatScore(stats.last);
-      attemptsEl.textContent = String(stats.attempts);
-      bestScoreEl.textContent = stats.attempts > 0 ? formatScore(stats.best) : "—";
+      const fx = getEffects();
+      lastScoreEl.textContent = formatScore(state.last);
+      attemptsEl.textContent = String(state.attempts);
+      bestScoreEl.textContent = state.attempts > 0 ? formatScore(state.best) : "—";
       avgScoreEl.textContent =
-        stats.attempts > 0 ? formatScore(stats.total / stats.attempts) : "—";
+        state.attempts > 0 ? formatScore(state.total / state.attempts) : "—";
+      pipsValueEl.textContent = formatPips(state.pips);
+      updatePipsRate();
+      critsValueEl.textContent = String(state.crits);
+      multLabelEl.textContent = `${fx.mult.toFixed(2)}x`;
+      critLabelEl.textContent = `${Math.round(fx.critChance * 100)}%`;
+      guysLabelEl.textContent = String(fx.guyCount);
+      if (auraTime > 0 && auraMult > 1) {
+        auraLabelEl.textContent = `${auraMult.toFixed(1)}x (${Math.ceil(auraTime)}s)`;
+      } else {
+        auraLabelEl.textContent = "off";
+      }
+      shopPipsEl.textContent = `${formatPips(state.pips)} pips`;
+      renderUpgrades();
+    }
+
+    const GUY_UPGRADE_IDS = new Set([
+      "guySpeed",
+      "guyAccuracy",
+      "guyMult",
+      "guyCrit",
+      "guyForgive",
+    ]);
+
+    const RELIC_UPGRADE_IDS = new Set([
+      "relicPower",
+      "relicDuration",
+      "relicSpawn",
+      "relicCatch",
+      "relicSlow",
+    ]);
+
+    function guysUnlocked() {
+      return levelOf("guys") > 0;
+    }
+
+    function relicsUnlocked() {
+      return levelOf("relics") > 0;
+    }
+
+    function getUpgradeLock(id) {
+      if (GUY_UPGRADE_IDS.has(id) && !guysUnlocked()) {
+        return "Hire a Little Guy first.";
+      }
+      if (RELIC_UPGRADE_IDS.has(id) && !relicsUnlocked()) {
+        return "Unlock Drift Relics first.";
+      }
+      return null;
+    }
+
+    function softCapProgress(level, rate) {
+      return 1 - Math.exp(-level * rate);
+    }
+
+    function isMaxed(def) {
+      if (Number.isFinite(def.maxLevel) && levelOf(def.id) >= def.maxLevel) return true;
+      if (def.softCapRate) {
+        return softCapProgress(levelOf(def.id), def.softCapRate) >= 0.995;
+      }
+      return false;
+    }
+
+    function renderUpgrades() {
+      upgradeListEl.innerHTML = "";
+      for (const def of UPGRADE_DEFS) {
+        const level = levelOf(def.id);
+        const lockReason = getUpgradeLock(def.id);
+        const locked = Boolean(lockReason);
+        const maxed = isMaxed(def);
+        const cost = upgradeCost(def);
+        const canBuy = !locked && !maxed && state.pips >= cost;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "upgrade";
+        btn.disabled = !canBuy;
+        const costLabel = locked
+          ? "LOCKED"
+          : maxed
+            ? def.maxLevel === 1
+              ? "OWNED"
+              : "MAX"
+            : `${formatPips(cost)} pips`;
+        let levelLabel = "Locked";
+        if (!locked) {
+          if (maxed && def.maxLevel === 1) {
+            levelLabel = "Unlocked";
+          } else if (def.softCapRate) {
+            const pct = Math.min(
+              100,
+              Math.round(softCapProgress(level, def.softCapRate) * 100)
+            );
+            levelLabel = maxed ? "100%" : `Lv ${level} · ${pct}%`;
+          } else {
+            levelLabel = `Lv ${level}`;
+          }
+        }
+        btn.innerHTML = `
+          <div class="upgrade-top">
+            <span class="upgrade-name">${def.name}</span>
+            <span class="upgrade-cost">${costLabel}</span>
+          </div>
+          <div class="upgrade-desc">${locked ? lockReason : def.desc}</div>
+          <div class="upgrade-level">${levelLabel}</div>
+        `;
+        btn.addEventListener("click", (event) => {
+          event.stopPropagation();
+          buyUpgrade(def.id);
+        });
+        upgradeListEl.appendChild(btn);
+      }
+    }
+
+    function buyUpgrade(id) {
+      const def = UPGRADE_DEFS.find((entry) => entry.id === id);
+      if (!def) return;
+      if (getUpgradeLock(id)) return;
+      if (isMaxed(def)) return;
+      const level = levelOf(id);
+      const cost = upgradeCost(def);
+      if (state.pips < cost) return;
+      state.pips -= cost;
+      state.levels[id] = level + 1;
+      saveState();
+      if (id === "guys") syncGuys();
+      if (id === "relics") relicSpawnTimer = 0.5;
+      updateHud();
+    }
+
+    function createGuy() {
+      const margin = 40;
+      const w = window.innerWidth || 800;
+      const h = window.innerHeight || 600;
+      const guy = {
+        x: margin + Math.random() * Math.max(40, w - margin * 2),
+        y: margin + Math.random() * Math.max(40, h - margin * 2),
+        phase: "wander",
+        targetX: margin + Math.random() * Math.max(40, w - margin * 2),
+        targetY: margin + Math.random() * Math.max(40, h - margin * 2),
+        cooldown: 0.4 + Math.random() * 1.2,
+        bob: Math.random() * Math.PI * 2,
+        color: PALETTE[Math.floor(Math.random() * PALETTE.length)],
+        draw: null,
+      };
+      return guy;
+    }
+
+    function syncGuys() {
+      const count = levelOf("guys");
+      while (guys.length < count) guys.push(createGuy());
+      while (guys.length > count) guys.pop();
+    }
+
+    function pickGuyTarget(guy) {
+      const margin = 48;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      guy.targetX = margin + Math.random() * Math.max(40, w - margin * 2);
+      guy.targetY = margin + Math.random() * Math.max(40, h - margin * 2);
+    }
+
+    function startGuyDraw(guy, fx) {
+      const size = 36 + Math.random() * 90;
+      const ratio = fx.guyMinRatio + Math.random() * (1 - fx.guyMinRatio);
+      let width = size;
+      let height = size;
+      if (Math.random() < 0.5) width = size / ratio;
+      else height = size / ratio;
+
+      const left = Math.max(12, Math.min(guy.x - width / 2, window.innerWidth - width - 12));
+      const top = Math.max(12, Math.min(guy.y - height / 2, window.innerHeight - height - 12));
+
+      guy.phase = "draw";
+      guy.color = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+      guy.draw = {
+        left,
+        top,
+        width,
+        height,
+        progress: 0,
+        duration: fx.guyDrawTime,
+      };
+      guy.x = left + width / 2;
+      guy.y = top + height / 2;
+    }
+
+    function createRelic() {
+      const margin = 60;
+      const w = window.innerWidth || 800;
+      const h = window.innerHeight || 600;
+      const angle = Math.random() * Math.PI * 2;
+      return {
+        x: margin + Math.random() * Math.max(40, w - margin * 2),
+        y: margin + Math.random() * Math.max(40, h - margin * 2),
+        vx: Math.cos(angle),
+        vy: Math.sin(angle),
+        wobble: Math.random() * Math.PI * 2,
+        size: 10 + Math.random() * 4,
+        color: RELIC_COLORS[Math.floor(Math.random() * RELIC_COLORS.length)],
+        life: 28 + Math.random() * 18,
+      };
+    }
+
+    // Relic must sit fully inside the drawn box (inset by its radius).
+    function rectFullyContainsRelic(rect, relic) {
+      const inset = Math.max(6, relic.size * 0.85);
+      return (
+        rect.width > inset * 2 &&
+        rect.height > inset * 2 &&
+        relic.x - inset >= rect.left &&
+        relic.x + inset <= rect.left + rect.width &&
+        relic.y - inset >= rect.top &&
+        relic.y + inset <= rect.top + rect.height
+      );
+    }
+
+    function collectRelicsInRect(rect) {
+      let caught = 0;
+      for (let i = relics.length - 1; i >= 0; i -= 1) {
+        const relic = relics[i];
+        if (rectFullyContainsRelic(rect, relic)) {
+          relics.splice(i, 1);
+          caught += 1;
+        }
+      }
+      return caught;
+    }
+
+    function activateRelicAura(fx, caughtCount) {
+      if (caughtCount <= 0) return;
+      auraMult = fx.relicAuraMult * (1 + (caughtCount - 1) * 0.12);
+      auraTime = fx.relicAuraDuration;
+      canvas.style.cursor = "none";
+      updateHud();
+    }
+
+    function updateRelics(dt) {
+      const fx = getEffects();
+
+      if (auraTime > 0) {
+        auraTime -= dt;
+        if (auraTime <= 0) {
+          auraTime = 0;
+          auraMult = 1;
+          canvas.style.cursor = "crosshair";
+          updateHud();
+        } else {
+          canvas.style.cursor = "none";
+          if (Math.floor(auraTime) !== Math.floor(auraTime + dt) && auraLabelEl) {
+            auraLabelEl.textContent = `${auraMult.toFixed(1)}x (${Math.ceil(auraTime)}s)`;
+          }
+        }
+      } else {
+        canvas.style.cursor = "crosshair";
+      }
+
+      if (!fx.relicsUnlocked) {
+        relics.length = 0;
+        return;
+      }
+
+      relicSpawnTimer -= dt;
+      if (relicSpawnTimer <= 0) {
+        if (relics.length < fx.relicMax) {
+          relics.push(createRelic());
+        }
+        relicSpawnTimer = fx.relicSpawnInterval * (0.75 + Math.random() * 0.5);
+      }
+
+      const margin = 30;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      for (let i = relics.length - 1; i >= 0; i -= 1) {
+        const relic = relics[i];
+        relic.wobble += dt * 1.6;
+        relic.life -= dt;
+
+        const speed = fx.relicSpeed;
+        relic.x += relic.vx * speed * dt + Math.sin(relic.wobble) * 6 * dt;
+        relic.y += relic.vy * speed * dt + Math.cos(relic.wobble * 0.8) * 6 * dt;
+
+        if (relic.x < margin || relic.x > w - margin) relic.vx *= -1;
+        if (relic.y < margin || relic.y > h - margin) relic.vy *= -1;
+        relic.x = Math.max(margin, Math.min(w - margin, relic.x));
+        relic.y = Math.max(margin, Math.min(h - margin, relic.y));
+
+        if (relic.life <= 0) relics.splice(i, 1);
+      }
+    }
+
+    function shadeHex(hex, factor) {
+      const raw = hex.replace("#", "");
+      const n = parseInt(raw.length === 3
+        ? raw.split("").map((c) => c + c).join("")
+        : raw, 16);
+      const r = Math.min(255, Math.max(0, Math.round(((n >> 16) & 255) * factor)));
+      const g = Math.min(255, Math.max(0, Math.round(((n >> 8) & 255) * factor)));
+      const b = Math.min(255, Math.max(0, Math.round((n & 255) * factor)));
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    function projectCubePoint(x, y, z, rotX, rotY, rotZ, scale) {
+      // Rotate around Y, then X, then Z
+      let cos = Math.cos(rotY);
+      let sin = Math.sin(rotY);
+      let x1 = x * cos + z * sin;
+      let z1 = -x * sin + z * cos;
+      let y1 = y;
+
+      cos = Math.cos(rotX);
+      sin = Math.sin(rotX);
+      const y2 = y1 * cos - z1 * sin;
+      const z2 = y1 * sin + z1 * cos;
+      const x2 = x1;
+
+      cos = Math.cos(rotZ);
+      sin = Math.sin(rotZ);
+      const x3 = x2 * cos - y2 * sin;
+      const y3 = x2 * sin + y2 * cos;
+
+      // Weak perspective so nearer faces read larger
+      const depth = 4.5;
+      const persp = depth / (depth + z2);
+      return {
+        x: x3 * scale * persp,
+        y: y3 * scale * persp,
+        z: z2,
+      };
+    }
+
+    function drawRelic(relic) {
+      const pulse = 1 + Math.sin(relic.wobble * 2) * 0.06;
+      const scale = relic.size * 0.72 * pulse;
+      const rotY = relic.wobble * 0.9;
+      const rotX = 0.55 + Math.sin(relic.wobble * 0.7) * 0.25;
+      const rotZ = Math.sin(relic.wobble * 0.45) * 0.2;
+
+      const corners = [
+        [-1, -1, -1],
+        [1, -1, -1],
+        [1, 1, -1],
+        [-1, 1, -1],
+        [-1, -1, 1],
+        [1, -1, 1],
+        [1, 1, 1],
+        [-1, 1, 1],
+      ].map(([x, y, z]) => projectCubePoint(x, y, z, rotX, rotY, rotZ, scale));
+
+      const faces = [
+        { idx: [0, 1, 2, 3], shade: 0.55 }, // back
+        { idx: [4, 5, 6, 7], shade: 1.05 }, // front
+        { idx: [0, 1, 5, 4], shade: 0.7 }, // bottom
+        { idx: [3, 2, 6, 7], shade: 1.2 }, // top
+        { idx: [0, 3, 7, 4], shade: 0.82 }, // left
+        { idx: [1, 2, 6, 5], shade: 0.92 }, // right
+      ].map((face) => {
+        const pts = face.idx.map((i) => corners[i]);
+        const depth =
+          (pts[0].z + pts[1].z + pts[2].z + pts[3].z) / 4;
+        return { pts, depth, shade: face.shade };
+      });
+
+      faces.sort((a, b) => a.depth - b.depth);
+
+      ctx.save();
+      ctx.translate(relic.x, relic.y);
+      ctx.shadowColor = relic.color;
+      ctx.shadowBlur = 14;
+
+      for (const face of faces) {
+        ctx.beginPath();
+        ctx.moveTo(face.pts[0].x, face.pts[0].y);
+        for (let i = 1; i < face.pts.length; i += 1) {
+          ctx.lineTo(face.pts[i].x, face.pts[i].y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = shadeHex(relic.color, face.shade);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = "rgba(20, 18, 26, 0.35)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    }
+
+    function setShopOpen(open) {
+      shopOpen = open;
+      shopEl.classList.toggle("open", open);
+      shopEl.setAttribute("aria-hidden", open ? "false" : "true");
+      shopToggleEl.setAttribute("aria-pressed", open ? "true" : "false");
+    }
+
+    function toggleShop() {
+      setShopOpen(!shopOpen);
     }
 
     function nextColor() {
@@ -571,11 +1434,10 @@
       return { left, top, width, height };
     }
 
-    // Harsh curve: 99% ratio ~90, 95% ~60, 90% ~35, 80% ~11
-    function scoreRect(width, height) {
+    function scoreRect(width, height, scorePower) {
       if (width < MIN_SIZE || height < MIN_SIZE) return null;
       const ratio = Math.min(width, height) / Math.max(width, height);
-      return Math.round(Math.pow(ratio, 10) * 100);
+      return Math.round(Math.pow(ratio, scorePower) * 100);
     }
 
     function scoreColor(score) {
@@ -614,11 +1476,70 @@
       ctx.restore();
     }
 
+    function drawLittleGuy(guy) {
+      const bobY = Math.sin(guy.bob) * 2.5;
+      const x = guy.x;
+      const y = guy.y + bobY;
+
+      ctx.save();
+      ctx.translate(x, y);
+
+      // body
+      ctx.fillStyle = guy.color;
+      ctx.beginPath();
+      ctx.moveTo(-7, -2);
+      ctx.quadraticCurveTo(-7, -4, -4, -4);
+      ctx.lineTo(4, -4);
+      ctx.quadraticCurveTo(7, -4, 7, -2);
+      ctx.lineTo(7, 10);
+      ctx.quadraticCurveTo(7, 12, 4, 12);
+      ctx.lineTo(-4, 12);
+      ctx.quadraticCurveTo(-7, 12, -7, 10);
+      ctx.closePath();
+      ctx.fill();
+
+      // head
+      ctx.beginPath();
+      ctx.arc(0, -10, 6.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // eyes
+      ctx.fillStyle = "#14121a";
+      ctx.beginPath();
+      ctx.arc(-2.2, -10.5, 1.2, 0, Math.PI * 2);
+      ctx.arc(2.2, -10.5, 1.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // legs
+      ctx.strokeStyle = guy.color;
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      const step = Math.sin(guy.bob * 2) * 3;
+      ctx.beginPath();
+      ctx.moveTo(-3, 12);
+      ctx.lineTo(-3 - step, 18);
+      ctx.moveTo(3, 12);
+      ctx.lineTo(3 + step, 18);
+      ctx.stroke();
+
+      // tiny pencil when drawing
+      if (guy.phase === "draw") {
+        ctx.strokeStyle = "#ffd60a";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(8, -2);
+        ctx.lineTo(16, -10);
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    }
+
     function redraw() {
       const w = window.innerWidth;
       const h = window.innerHeight;
       ctx.clearRect(0, 0, w, h);
-      if (showGrid) drawGrid(w, h);
+      if (gridUnlocked()) drawGrid(w, h);
 
       for (const past of pastRects) {
         ctx.strokeStyle = past.color || "rgba(255, 255, 255, 0.2)";
@@ -626,32 +1547,132 @@
         ctx.lineWidth = 2;
         ctx.strokeRect(past.left, past.top, past.width, past.height);
       }
+
+      for (const clearing of clearingRects) {
+        const cx = clearing.left + clearing.width / 2;
+        const cy = clearing.top + clearing.height / 2;
+        const w = clearing.width * clearing.scale;
+        const h = clearing.height * clearing.scale;
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(clearing.spin);
+        ctx.globalAlpha = clearing.alpha;
+        ctx.strokeStyle = clearing.color || "rgba(255, 255, 255, 0.2)";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(-w / 2, -h / 2, w, h);
+        ctx.restore();
+      }
       ctx.globalAlpha = 1;
+
+      for (const guy of guys) {
+        if (guy.phase === "draw" && guy.draw) {
+          const d = guy.draw;
+          const pw = d.width * d.progress;
+          const ph = d.height * d.progress;
+          ctx.strokeStyle = guy.color;
+          ctx.globalAlpha = 0.85;
+          ctx.lineWidth = 2;
+          ctx.setLineDash([5, 4]);
+          ctx.strokeRect(d.left, d.top, pw, ph);
+          ctx.setLineDash([]);
+          ctx.globalAlpha = 1;
+        }
+      }
 
       if (drawing) {
         const rect = normalizeRect(startX, startY, currentX, currentY);
-        ctx.strokeStyle = drawColor;
-        ctx.lineWidth = 2.5;
-        ctx.shadowColor = drawColor;
-        ctx.shadowBlur = 12;
+        const auraOn = auraTime > 0 && auraMult > 1;
+        const pulse = auraOn
+          ? 0.5 + 0.5 * Math.sin(performance.now() / 140)
+          : 0;
+
+        if (auraOn) {
+          ctx.strokeStyle = "#ffd60a";
+          ctx.globalAlpha = 0.25 + pulse * 0.35;
+          ctx.lineWidth = 8 + pulse * 6;
+          ctx.shadowColor = "#ffd60a";
+          ctx.shadowBlur = 18 + pulse * 16;
+          ctx.strokeRect(rect.left, rect.top, rect.width, rect.height);
+
+          ctx.globalAlpha = 0.55 + pulse * 0.35;
+          ctx.lineWidth = 2;
+          ctx.setLineDash([7 + pulse * 4, 5]);
+          ctx.lineDashOffset = -performance.now() / 30;
+          ctx.strokeRect(rect.left, rect.top, rect.width, rect.height);
+          ctx.setLineDash([]);
+          ctx.lineDashOffset = 0;
+        }
+
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = auraOn ? "#ffd60a" : drawColor;
+        ctx.lineWidth = auraOn ? 2.5 + pulse * 1.5 : 2.5;
+        ctx.shadowColor = auraOn ? "#ffd60a" : drawColor;
+        ctx.shadowBlur = auraOn ? 14 + pulse * 18 : 12;
         ctx.strokeRect(rect.left, rect.top, rect.width, rect.height);
         ctx.shadowBlur = 0;
       }
+
+      if (auraTime > 0 && auraMult > 1 && pointerOnCanvas) {
+        drawAuraCursor(pointerX, pointerY);
+      }
+
+      for (const relic of relics) drawRelic(relic);
+
+      for (const guy of guys) drawLittleGuy(guy);
+
+      for (const floater of floatScores) {
+        ctx.globalAlpha = Math.max(0, floater.life / floater.maxLife);
+        ctx.fillStyle = floater.color;
+        ctx.font = "600 14px 'Space Grotesk', sans-serif";
+        ctx.fillText(floater.text, floater.x, floater.y);
+        ctx.globalAlpha = 1;
+      }
     }
 
-    function showFlash(score, x, y) {
+    function drawAuraCursor(x, y) {
+      const t = performance.now() / 1000;
+      const pulse = 0.5 + 0.5 * Math.sin(t * 7);
+
+      ctx.save();
+      ctx.translate(x, y);
+
+      for (let i = 0; i < 3; i += 1) {
+        const phase = (t * 1.6 + i / 3) % 1;
+        const radius = 8 + phase * (18 + pulse * 8);
+        const alpha = (1 - phase) * (0.55 + pulse * 0.25);
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255, 214, 10, ${alpha})`;
+        ctx.lineWidth = 2;
+        ctx.shadowColor = "#ffd60a";
+        ctx.shadowBlur = 10;
+        ctx.stroke();
+      }
+
+      ctx.beginPath();
+      ctx.arc(0, 0, 3.5 + pulse * 1.5, 0, Math.PI * 2);
+      ctx.fillStyle = "#ffd60a";
+      ctx.shadowColor = "#ffd60a";
+      ctx.shadowBlur = 12 + pulse * 10;
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    function showFlash(label, x, y, color, isCrit) {
       clearTimeout(flashTimer);
-      flashEl.textContent = String(score);
-      flashEl.style.color = scoreColor(score);
+      flashEl.textContent = label;
+      flashEl.style.color = color;
       flashEl.style.left = `${x}px`;
       flashEl.style.top = `${y}px`;
+      flashEl.classList.toggle("crit", Boolean(isCrit));
       flashEl.classList.remove("hide", "show");
       void flashEl.offsetWidth;
       flashEl.classList.add("show");
       flashTimer = setTimeout(() => {
         flashEl.classList.add("hide");
         flashEl.classList.remove("show");
-      }, 700);
+      }, isCrit ? 900 : 700);
     }
 
     function feedbackForScore(score) {
@@ -659,10 +1680,10 @@
       return tier.lines[Math.floor(Math.random() * tier.lines.length)];
     }
 
-    function showFeedback(score) {
+    function showFeedback(text, color) {
       clearTimeout(feedbackTimer);
-      feedbackEl.textContent = feedbackForScore(score);
-      feedbackEl.style.color = scoreColor(score);
+      feedbackEl.textContent = text;
+      feedbackEl.style.color = color;
       feedbackEl.classList.remove("hide", "show");
       void feedbackEl.offsetWidth;
       feedbackEl.classList.add("show");
@@ -672,66 +1693,301 @@
       }, 2400);
     }
 
+    function showPerfectBanner() {
+      clearTimeout(perfectTimer);
+      perfectBannerEl.setAttribute("aria-hidden", "false");
+      perfectBannerEl.classList.remove("hide", "show");
+      void perfectBannerEl.offsetWidth;
+      perfectBannerEl.classList.add("show");
+      perfectTimer = setTimeout(() => {
+        perfectBannerEl.classList.add("hide");
+        perfectBannerEl.classList.remove("show");
+        perfectBannerEl.setAttribute("aria-hidden", "true");
+      }, 1400);
+    }
+
+    function startPerfectClear(keepRect) {
+      clearingRects = pastRects.map((rect, index) => ({
+        ...rect,
+        alpha: 0.45,
+        scale: 1,
+        spin: 0,
+        spinSpeed: (index % 2 === 0 ? 1 : -1) * (0.8 + Math.random() * 1.4),
+        delay: index * 0.035,
+      }));
+      pastRects = keepRect ? [keepRect] : [];
+      showPerfectBanner();
+    }
+
+    function updateClearingRects(dt) {
+      for (let i = clearingRects.length - 1; i >= 0; i -= 1) {
+        const rect = clearingRects[i];
+        if (rect.delay > 0) {
+          rect.delay -= dt;
+          continue;
+        }
+        rect.alpha -= dt * 1.15;
+        rect.scale += dt * 0.85;
+        rect.spin += rect.spinSpeed * dt;
+        if (rect.alpha <= 0) clearingRects.splice(i, 1);
+      }
+    }
+
+    function submitRect(rect, color, options = {}) {
+      const { announce = true, fromGuy = false } = options;
+      const fx = getEffects();
+      const scored = rect;
+
+      const power = fromGuy ? fx.guyScorePower : fx.scorePower;
+      const accuracy = scoreRect(scored.width, scored.height, power);
+      if (accuracy == null) return null;
+
+      const caught = collectRelicsInRect(rect);
+      if (caught > 0) activateRelicAura(fx, caught);
+
+      const critChance = fromGuy ? fx.guyCritChance : fx.critChance;
+      const critPower = fromGuy ? fx.guyCritPower : fx.critPower;
+      const pipMult = fromGuy ? fx.mult * fx.guyMult : fx.mult;
+      const activeAura = auraTime > 0 ? auraMult : 1;
+      const catchBurst = caught > 0 ? fx.relicCatchMult * caught : 1;
+      const isCrit = Math.random() < critChance;
+      const critFactor = isCrit ? critPower : 1;
+      // Score = pure square quality. Pips = economy after all multipliers.
+      const earnedPips = Math.max(
+        1,
+        Math.round(
+          accuracy *
+            pipMult *
+            critFactor *
+            activeAura *
+            catchBurst *
+            fx.pipBoost *
+            (fromGuy ? 0.65 : 1)
+        )
+      );
+
+      const kept = { ...scored, color };
+      if (accuracy === 100) {
+        startPerfectClear(kept);
+      } else {
+        pastRects.push(kept);
+      }
+
+      state.attempts += 1;
+      state.total += accuracy;
+      state.last = accuracy;
+      if (accuracy > state.best) state.best = accuracy;
+      state.pips += earnedPips;
+      recordPips(earnedPips);
+      if (isCrit) state.crits += 1;
+      hintEl.classList.add("hidden");
+
+      if (fromGuy) {
+        lastScoreEl.textContent = formatScore(state.last);
+        bestScoreEl.textContent = formatScore(state.best);
+        avgScoreEl.textContent = formatScore(state.total / state.attempts);
+        attemptsEl.textContent = String(state.attempts);
+        pipsValueEl.textContent = formatPips(state.pips);
+        updatePipsRate();
+        critsValueEl.textContent = String(state.crits);
+        shopPipsEl.textContent = `${formatPips(state.pips)} pips`;
+        if (auraTime > 0 && auraMult > 1) {
+          auraLabelEl.textContent = `${auraMult.toFixed(1)}x (${Math.ceil(auraTime)}s)`;
+        }
+        if (state.attempts % 4 === 0) {
+          saveState();
+          renderUpgrades();
+        }
+      } else {
+        saveState();
+        updateHud();
+      }
+
+      const cx = scored.left + scored.width / 2;
+      const cy = scored.top + scored.height / 2;
+      const tint = caught > 0 ? "#ffd60a" : isCrit ? "#ffd60a" : scoreColor(accuracy);
+
+      if (announce) {
+        if (accuracy === 100) {
+          showFeedback("Board cleared.", "#00f5d4");
+        } else {
+          const flashLabel =
+            caught > 0
+              ? `RELIC +${formatPips(earnedPips)}`
+              : isCrit
+                ? `CRIT +${formatPips(earnedPips)}`
+                : `+${formatPips(earnedPips)}`;
+          showFlash(flashLabel, cx, cy, tint, isCrit || caught > 0);
+          const line =
+            caught > 0
+              ? caught > 1
+                ? "Multi-relic cage!"
+                : "Relic squared in!"
+              : isCrit
+                ? CRIT_FEEDBACK[Math.floor(Math.random() * CRIT_FEEDBACK.length)]
+                : feedbackForScore(accuracy);
+          showFeedback(line, tint);
+        }
+      } else if (accuracy !== 100) {
+        floatScores.push({
+          x: cx - 10,
+          y: cy,
+          text:
+            caught > 0
+              ? `RELIC +${formatPips(earnedPips)}`
+              : isCrit
+                ? `CRIT +${formatPips(earnedPips)}`
+                : `+${formatPips(earnedPips)}`,
+          color: tint,
+          life: 0.9,
+          maxLife: 0.9,
+        });
+      }
+
+      return { accuracy, earnedPips, isCrit, caught, rect: scored };
+    }
+
     function finishDraw() {
       if (!drawing) return;
       drawing = false;
 
       const rect = normalizeRect(startX, startY, currentX, currentY);
-      const score = scoreRect(rect.width, rect.height);
+      submitRect(rect, drawColor, { announce: true, fromGuy: false });
+      redraw();
+    }
 
-      if (score == null) {
-        redraw();
-        return;
+    function updateGuys(dt) {
+      const fx = getEffects();
+      const margin = 24;
+
+      for (const guy of guys) {
+        guy.bob += dt * (4 + fx.guySpeed / 40);
+
+        if (guy.phase === "wander") {
+          const dx = guy.targetX - guy.x;
+          const dy = guy.targetY - guy.y;
+          const dist = Math.hypot(dx, dy) || 1;
+          const step = fx.guySpeed * dt;
+
+          if (dist <= step + 2) {
+            guy.x = guy.targetX;
+            guy.y = guy.targetY;
+            guy.cooldown -= dt;
+            if (guy.cooldown <= 0) {
+              startGuyDraw(guy, fx);
+            }
+          } else {
+            guy.x += (dx / dist) * step;
+            guy.y += (dy / dist) * step;
+          }
+
+          guy.x = Math.max(margin, Math.min(window.innerWidth - margin, guy.x));
+          guy.y = Math.max(margin, Math.min(window.innerHeight - margin, guy.y));
+        } else if (guy.phase === "draw" && guy.draw) {
+          guy.draw.progress += dt / guy.draw.duration;
+          if (guy.draw.progress >= 1) {
+            guy.draw.progress = 1;
+            submitRect(
+              {
+                left: guy.draw.left,
+                top: guy.draw.top,
+                width: guy.draw.width,
+                height: guy.draw.height,
+              },
+              guy.color,
+              { announce: false, fromGuy: true }
+            );
+            guy.phase = "wander";
+            guy.draw = null;
+            guy.cooldown = fx.guyCooldown * (0.75 + Math.random() * 0.5);
+            pickGuyTarget(guy);
+          }
+        }
       }
 
-      pastRects.push({ ...rect, color: drawColor });
-      stats.attempts += 1;
-      stats.total += score;
-      stats.last = score;
-      if (score > stats.best) stats.best = score;
-      saveStats();
-      updateHud();
-      hintEl.classList.add("hidden");
+      for (let i = floatScores.length - 1; i >= 0; i -= 1) {
+        const floater = floatScores[i];
+        floater.y -= 28 * dt;
+        floater.life -= dt;
+        if (floater.life <= 0) floatScores.splice(i, 1);
+      }
+    }
 
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      showFlash(score, cx, cy);
-      showFeedback(score);
+    let pipsRateTick = 0;
+
+    function tick(now) {
+      const dt = Math.min(0.05, (now - lastFrame) / 1000);
+      lastFrame = now;
+      updateGuys(dt);
+      updateRelics(dt);
+      updateClearingRects(dt);
+      pipsRateTick += dt;
+      if (pipsRateTick >= 0.5) {
+        pipsRateTick = 0;
+        updatePipsRate();
+      }
       redraw();
+      requestAnimationFrame(tick);
+    }
+
+    function trackPointer(event) {
+      const point = getPoint(event);
+      pointerX = point.x;
+      pointerY = point.y;
+      pointerOnCanvas = true;
     }
 
     function onPointerDown(event) {
+      if (event.target.closest(".shop, .hud-btn, .upgrade")) return;
       event.preventDefault();
-      const point = getPoint(event);
+      trackPointer(event);
       drawing = true;
       nextColor();
-      startX = currentX = point.x;
-      startY = currentY = point.y;
-      redraw();
+      startX = currentX = pointerX;
+      startY = currentY = pointerY;
     }
 
     function onPointerMove(event) {
+      trackPointer(event);
       if (!drawing) return;
       event.preventDefault();
-      const point = getPoint(event);
-      currentX = point.x;
-      currentY = point.y;
-      redraw();
+      currentX = pointerX;
+      currentY = pointerY;
     }
 
     function onPointerUp(event) {
+      trackPointer(event);
       if (!drawing) return;
       event.preventDefault();
-      const point = getPoint(event);
-      currentX = point.x;
-      currentY = point.y;
+      currentX = pointerX;
+      currentY = pointerY;
       finishDraw();
     }
 
-    function resetStats() {
-      stats = { attempts: 0, total: 0, best: 0, last: null };
+    function onPointerLeave() {
+      pointerOnCanvas = false;
+    }
+
+    function restartGame() {
+      const ok = window.confirm(
+        "Restart the whole game?\n\nThis wipes pips, upgrades, and all progress."
+      );
+      if (!ok) return;
+
+      state = defaultState();
       pastRects = [];
-      saveStats();
+      clearingRects = [];
+      guys = [];
+      relics = [];
+      floatScores = [];
+      auraMult = 1;
+      auraTime = 0;
+      relicSpawnTimer = 3;
+      pipEvents = [];
+      drawing = false;
+      setShopOpen(false);
+      saveState();
+      syncGuys();
       updateHud();
       hintEl.classList.remove("hidden");
       redraw();
@@ -740,6 +1996,8 @@
     canvas.addEventListener("mousedown", onPointerDown);
     window.addEventListener("mousemove", onPointerMove);
     window.addEventListener("mouseup", onPointerUp);
+    canvas.addEventListener("mouseenter", trackPointer);
+    canvas.addEventListener("mouseleave", onPointerLeave);
 
     canvas.addEventListener("touchstart", onPointerDown, { passive: false });
     window.addEventListener("touchmove", onPointerMove, { passive: false });
@@ -748,27 +2006,28 @@
 
     window.addEventListener("resize", resize);
     window.addEventListener("keydown", (event) => {
-      if (event.key === "r" || event.key === "R") {
-        resetStats();
-      }
-      if (event.key === "g" || event.key === "G") {
-        toggleGrid();
-      }
+      if (event.key === "u" || event.key === "U") toggleShop();
+      if (event.key === "Escape" && shopOpen) setShopOpen(false);
     });
 
-    gridToggleEl.addEventListener("click", (event) => {
+    shopToggleEl.addEventListener("click", (event) => {
       event.stopPropagation();
-      toggleGrid();
+      toggleShop();
     });
 
-    resetBtnEl.addEventListener("click", (event) => {
+    restartBtnEl.addEventListener("click", (event) => {
       event.stopPropagation();
-      resetStats();
+      restartGame();
     });
 
-    syncGridToggle();
+    window.addEventListener("beforeunload", () => {
+      saveState();
+    });
+
+    syncGuys();
     updateHud();
     resize();
+    requestAnimationFrame(tick);
   </script>
 </body>
 </html>
